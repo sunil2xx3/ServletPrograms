@@ -1,0 +1,881 @@
+// >>>>>>>created-send-email-notification
+
+input.form_add_edit_mode = "exist";
+if(input.ew_loginUser == "elango.j@zohocorp.com" || input.ew_loginUser == "suresh.j@zohocorp.com" || input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	// ******************************** 1. Send Email to Notify team *******************************************
+	recordMap = Map();
+	recordMap.put("mode","add");
+	recordMap.put("ID",input.ID);
+	recordMap.put("Events_or_Webinars",input.Events_or_Webinars);
+	recordMap.put("Select_where_you_want",input.Select_where_you_want);
+	recordMap.put("Request_Type",input.Request_Type);
+	recordMap.put("Title",input.Title);
+	recordMap.put("Description",input.Description);
+	recordMap.put("Event_category",input.Event_category);
+	recordMap.put("Priority",input.Priority);
+	recordMap.put("ew_loginUser",input.ew_loginUser);
+	recordMap.put("Comments",input.Comments);
+	recordMap.put("Added_User",input.Added_User);
+	recordMap.put("Added_Time",input.Added_Time);
+	recordMap.put("Select_your_option",input.Select_your_option);
+	recordMap.put("landing_page",input.landing_page);
+	recordMap.put("Event_Name",input.Event_Name);
+	recordMap.put("Venue_details",input.Venue_details);
+	recordMap.put("About_Event",input.About_Event);
+	getCountry = Countries[ID == input.Country];
+	recordMap.put("Country",getCountry.Country);
+	//
+	//
+	listOfNotifyEmail = "";
+	if(Notify_Team != null)
+	{
+		// Notify_Team = "46442000131249318 , 46442000131249319";
+		items = input.Notify_Team.toListString();
+		for each  i in items
+		{
+			newText = trim(i);
+			emailID = newText.toNumber();
+			getNotifyEmail = Team_Email[ID = emailID];
+			emailToSend = getNotifyEmail.Team_Email;
+			recordMap.put("emailToSend",emailToSend);
+			thisapp.eventsWebinar.requestCreatedMail(recordMap);
+			// 		if(listOfNotifyEmail == "") {
+			// 			listOfNotifyEmail = emailToSend;
+			// 		} else {
+			// 			listOfNotifyEmail = listOfNotifyEmail + ", " +emailToSend;
+			// 		}
+		}
+	}
+	// ************** 2. Send Email to ME social team for listing **************************** //
+	socialCheck = input.Select_your_option.contains("Add to social");
+	if(socialCheck)
+	{
+		recordMap.put("from_date",input.From_Date);
+		recordMap.put("to_date",input.To_Date);
+		recordMap.put("Time_of_Event",input.Time_of_Event);
+		recordMap.put("Platforms",input.Platforms);
+		recordMap.put("Event_registration_link",input.Event_registration_link);
+		recordMap.put("Timezone1",input.Timezone1);
+		recordMap.put("Creatives_to_Upload",input.Creatives_to_Upload);
+		recordMap.put("emailToSend","me-social@manageengine.com");
+		thisapp.eventsWebinar.socialTeamMail(recordMap);
+		// **** Notify(elango.j+social@zohotest.com) ****
+		recordMap.put("emailToSend","elango.j+social@zohotest.com");
+		thisapp.eventsWebinar.socialTeamMail(recordMap);
+	}
+	// ************** 3. Send Email to ME-Development (notification) / To elango (check flow working for some days) **************************** //
+	// // **** Notify(elango.j+eventform@zohotest.com) ****
+	// recordMap.put("emailToSend","elango.j+eventform@zohotest.com");
+	// thisapp.eventsWebinar.requestCreatedMail(recordMap);
+	// // **** Notify(me-cdev@zohocorp.com) ****
+	recordMap.put("emailToSend","me-cdev@zohocorp.com");
+	thisapp.eventsWebinar.requestCreatedMail(recordMap);
+}
+
+
+//>>>>>>>>>> cmd-insert-integration
+
+if(input.ew_loginUser == "elango.j@zohocorp.com" || input.ew_loginUser == "suresh.j@zohocorp.com" || input.ew_loginUser == "vdavid@zohocorp.com" || input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// ***** important add same mail id in Delete successful workflow ***** //
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	// ******************************************************************************************************************************************//
+	// ********* Speaker List add to the CMD creative description ********* //
+	SpeakerDetails = "";
+	SpeakerIndex = 1;
+	for each  i_list in Speakers
+	{
+		speakerTitle = "Speaker - " + SpeakerIndex + "\n";
+		SpeakerIndex = SpeakerIndex + 1;
+		speakerName = "Speaker Name: " + i_list.Speaker_Name + "\n";
+		speakerImage = "Speaker Image URL: " + i_list.Speaker_Image_Url + "\n";
+		speakerImageFile = "Speaker Image File: " + i_list.Speaker_Image_Upload + "\n";
+		speakerDesignation = "Speaker Designation: " + i_list.Speaker_Designation + "\n\n";
+		SpeakerDetails = SpeakerDetails + speakerTitle + speakerName + speakerImage + speakerImageFile + speakerDesignation;
+	}
+	// ********* Date List add to the CMD creative description ********* //
+	DateListDetails = "";
+	DateListIndex = 1;
+	for each  j_list in Dates_list
+	{
+		webinarDateListTitle = "Date List - " + DateListIndex + "\n";
+		DateListIndex = DateListIndex + 1;
+		getTimezoneName = Timezone[ID == j_list.Time_Zone];
+		webinarDateListDate = "Date: " + j_list.Date_field1 + "\n";
+		webinarDateListTime = "Time: " + j_list.Time.getSuffix(" ") + "\n";
+		webinarDateListTimezone = "Timezone: " + getTimezoneName.Timezone_Value + "\n";
+		webinarDateListWebinarURL = "Webinar URL: " + j_list.Events_Webinar_URL + "\n\n";
+		DateListDetails = DateListDetails + webinarDateListDate + webinarDateListTime + webinarDateListTimezone + webinarDateListWebinarURL;
+	}
+	//
+	getCountryDetails = Countries[ID == input.Country];
+	descrptn = "";
+	descrptn = descrptn + "Event Name: " + input.Event_Name + "\n";
+	descrptn = descrptn + "From Date: " + input.From_Date + "\n";
+	descrptn = descrptn + "To Date: " + input.To_Date + "\n";
+	descrptn = descrptn + "Country: " + getCountryDetails.Country + "\n";
+	descrptn = descrptn + "Category: " + input.Event_category + "\n";
+	descrptn = descrptn + "Venue Details: " + input.Venue_details + "\n";
+	if(landing_page == "No" && Select_your_option == "Add to website")
+	{
+		descrptn = descrptn + "Website url: " + input.Event_Webinar_URL + "\n";
+	}
+	descrptn = descrptn + "\n Description: " + input.Description + "\n";
+	if(SpeakerDetails != "")
+	{
+		descrptn = descrptn + "\n Speaker Details: \n" + SpeakerDetails + "\n";
+	}
+	if(DateListDetails != "")
+	{
+		descrptn = descrptn + "\n Date List Details: \n" + DateListDetails + "\n";
+	}
+	//
+	//  *********************************************************************************************************************************************//
+	//  *********************************************************************************************************************************************//
+	websiteCheck = input.Select_your_option.contains("Add to website");
+	socialCheck = input.Select_your_option.contains("Add to social");
+	cardCheck = input.Select_your_option.contains("ID Card");
+	mailerCheck = input.Select_your_option.contains("HTML mailers");
+	bannerCheck = input.Select_your_option.contains("Home page banner");
+	wd_event_page = "46442000131248522";
+	wd_webinar_page = "46442000131248527";
+	wd_idcard = "46442000131248531";
+	wd_html_mailers = "46442000131248524";
+	if(Request_Type == "Web Development")
+	{
+		// 		_Development_Type = "46442000131248522";
+		// 		if(input.Events_or_Webinars == "Webinars")
+		// 		{
+		// 			_Development_Type = "46442000131248527";
+		// 		}
+		//		//
+		// 		w_record_insert_id = insert into Design_Request
+		// 		[
+		// 			Request_Title=input.Title
+		// 			Request_Type=input.Request_Type
+		// 			Development_Type=_Development_Type
+		// 			ME_Solutions1=input.All_Solutions
+		// 			Product_Name2=input.Products_solution
+		// 			Team_Email1=input.Notify_Team
+		// 			Description=descrptn
+		// 			Upload_Content=input.Content_Docs
+		// 			Docs_Link=input.Document_link
+		// 			reviewed_apporved="No"
+		// 			Priority=input.Priority
+		// 			Email=zoho.loginuserid
+		// 			Developer_Status="Open"
+		// 			Development_Approval="Not Approved"
+		// 			Design_Status="Not needed"
+		// 			Design_Approval="Not Approved"
+		// 			Graphic_Designer_Status="Not needed"
+		// 			Graphics_Design_Approval="Not Approved"
+		// 			Added_User=zoho.loginuser
+		// 			Refer_From="Events_Webinar"
+		// 			Country=input.Country
+		// 			Language="English"
+		// 		];
+		// 		//
+		// 		input.creative_form_id = toString(w_record_insert_id);
+		// 		CR = Design_Request[ID == w_record_insert_id];
+		// 		thisapp.CreativeRequest.NewRequest(CR);
+		creative_id = "";
+		wRequestData = Map();
+		wRequestData.put("Request_Title",input.Title);
+		wRequestData.put("Request_Type","Web Development");
+		wRequestData.put("ME_Solutions1",input.All_Solutions);
+		wRequestData.put("Product_Name2",input.Products_solution);
+		wRequestData.put("Team_Email1",input.Notify_Team);
+		wRequestData.put("Description",descrptn);
+		wRequestData.put("Upload_Content",input.Content_Docs);
+		wRequestData.put("Docs_Link",input.Document_link);
+		wRequestData.put("reviewed_apporved",input.Has_a_content_been_reviewed_approved);
+		wRequestData.put("Approval_ID",input.Content_approval_ID);
+		wRequestData.put("Priority",input.Priority);
+		wRequestData.put("Country",input.Country);
+		wRequestData.put("Language","English");
+		if(websiteCheck)
+		{
+			wRequestData.put("Development_Type",wd_event_page);
+			if(input.Events_or_Webinars == "Webinars")
+			{
+				wRequestData.put("Development_Type",wd_webinar_page);
+			}
+			w_record_insert_id = thisapp.eventsWebinar.eventDevelopmentInsert(wRequestData);
+			if(creative_id == "")
+			{
+				creative_id = toString(w_record_insert_id);
+			}
+			else
+			{
+				creative_id = creative_id + ", " + toString(w_record_insert_id);
+			}
+		}
+		if(cardCheck)
+		{
+			wRequestData.put("Development_Type",wd_idcard);
+			w_record_insert_id = thisapp.eventsWebinar.eventDevelopmentInsert(wRequestData);
+			if(creative_id == "")
+			{
+				creative_id = toString(w_record_insert_id);
+			}
+			else
+			{
+				creative_id = creative_id + ", " + toString(w_record_insert_id);
+			}
+		}
+		if(mailerCheck)
+		{
+			wRequestData.put("Development_Type",wd_html_mailers);
+			w_record_insert_id = thisapp.eventsWebinar.eventDevelopmentInsert(wRequestData);
+			if(creative_id == "")
+			{
+				creative_id = toString(w_record_insert_id);
+			}
+			else
+			{
+				creative_id = creative_id + ", " + toString(w_record_insert_id);
+			}
+		}
+		input.creative_form_id = creative_id;
+		CR = Design_Request[ID == w_record_insert_id];
+		thisapp.CreativeRequest.NewRequest(CR);
+	}
+	// *************************************************************************************** //
+	else if(Request_Type == "Design")
+	{
+		_desing_content_Type = "46442000131248474";
+		d_record_insert_id = insert into Design_Request
+		[
+			Request_Title=input.Title
+			Request_Type=input.Request_Type
+			Design_Content_Type1=_desing_content_Type
+			Design_and_Development_type=null
+			Development_Type=null
+			Video_Type=null
+			Video_Content_Type=null
+			Design_Web_and_Video_Content_Type=null
+			Design_and_Video=null
+			ME_Solutions1=input.All_Solutions
+			Product_Name2=input.Products_solution
+			Team_Email1=input.Notify_Team
+			Description=descrptn
+			reviewed_apporved="No"
+			Priority=input.Priority
+			Email=zoho.loginuserid
+			Design_Status="Open"
+			Design_Approval="Not Approved"
+			Developer_Status="Not needed"
+			Development_Approval="Not Approved"
+			Graphic_Designer_Status="Not needed"
+			Graphics_Design_Approval="Not Approved"
+			Added_User=zoho.loginuser
+			Refer_From="Events_Webinar"
+			Country=input.Country
+			Language="English"
+			do_you_want_to_include_branding_team_design="No"
+		];
+		//
+		input.creative_form_id = toString(d_record_insert_id);
+		CR = Design_Request[ID == d_record_insert_id];
+		thisapp.CreativeRequest.NewRequest(CR);
+	}
+	// *************************************************************************************** //
+	else if(Request_Type == "Design and Web Development")
+	{
+		creative_id = "";
+		// --------- Global creative ID for design and web development 
+		if(input.landing_page != "" || input.landing_page != null)
+		{
+			// 			websiteCheck = input.Select_your_option.contains("Add to website");
+			// 			socialCheck = input.Select_your_option.contains("Add to social");
+			// 			cardCheck = input.Select_your_option.contains("ID Card");
+			// 			mailerCheck = input.Select_your_option.contains("HTML mailers");
+			// 			bannerCheck = input.Select_your_option.contains("Home page banner");
+			//
+			//
+			ddRequestData = Map();
+			ddRequestData.put("Request_Title",input.Title);
+			ddRequestData.put("Request_Type",input.Request_Type);
+			ddRequestData.put("ME_Solutions1",input.All_Solutions);
+			ddRequestData.put("Product_Name2",input.Products_solution);
+			ddRequestData.put("Team_Email1",input.Notify_Team);
+			ddRequestData.put("Description",descrptn);
+			ddRequestData.put("Upload_Content",input.Content_Docs);
+			ddRequestData.put("Docs_Link",input.Document_link);
+			ddRequestData.put("reviewed_apporved",input.Has_a_content_been_reviewed_approved);
+			ddRequestData.put("Approval_ID",input.Content_approval_ID);
+			ddRequestData.put("Priority",input.Priority);
+			ddRequestData.put("Email",zoho.loginuserid);
+			ddRequestData.put("Developer_Status","Open");
+			ddRequestData.put("Development_Approval","Not Approved");
+			ddRequestData.put("Design_Status","Open");
+			ddRequestData.put("Design_Approval","Not Approved");
+			ddRequestData.put("Graphic_Designer_Status","Not needed");
+			ddRequestData.put("Graphics_Design_Approval","Not Approved");
+			ddRequestData.put("Country",input.Country);
+			ddRequestData.put("Language","English");
+			//
+			//
+			if(input.landing_page == "Yes" && input.Events_or_Webinars == "Events")
+			{
+				_dd_type = "46442000131248447";
+				ddRequestData.put("Design_and_Development_type",_dd_type);
+				dw_record_insert_id = thisapp.eventsWebinar.design_Development_insert(ddRequestData);
+				if(creative_id == "")
+				{
+					creative_id = toString(dw_record_insert_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(dw_record_insert_id);
+				}
+				CR = Design_Request[ID == dw_record_insert_id];
+				thisapp.CreativeRequest.NewRequest(CR);
+			}
+			if(input.landing_page == "Yes" && input.Events_or_Webinars == "Webinars")
+			{
+				_dd_type = "46442000131248452";
+				ddRequestData.put("Design_and_Development_type",_dd_type);
+				dw_record_insert_id = thisapp.eventsWebinar.design_Development_insert(ddRequestData);
+				if(creative_id == "")
+				{
+					creative_id = toString(dw_record_insert_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(dw_record_insert_id);
+				}
+				CR = Design_Request[ID == dw_record_insert_id];
+				thisapp.CreativeRequest.NewRequest(CR);
+			}
+			if(bannerCheck)
+			{
+				_dd_type = "46442000131248457";
+				ddRequestData.put("Design_and_Development_type",_dd_type);
+				dw_record_insert_id = thisapp.eventsWebinar.design_Development_insert(ddRequestData);
+				if(creative_id == "")
+				{
+					creative_id = toString(dw_record_insert_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(dw_record_insert_id);
+				}
+				CR = Design_Request[ID == dw_record_insert_id];
+				thisapp.CreativeRequest.NewRequest(CR);
+			}
+			if(cardCheck)
+			{
+				//_dd_type = "46442000131248456";
+				//ddRequestData.put("Design_and_Development_type",_dd_type);
+				//dw_record_insert_id = thisapp.eventsWebinar.design_Development_insert(ddRequestData);
+				//
+				ddRequestData.put("Development_Type",wd_idcard);
+				ddRequestData.put("Request_Type","Web Development");
+				// change design and web development to web development 
+				ddRequestData.put("Design_Status","Not needed");
+				dw_record_insert_id = thisapp.eventsWebinar.eventDevelopmentInsert(ddRequestData);
+				if(creative_id == "")
+				{
+					creative_id = toString(dw_record_insert_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(dw_record_insert_id);
+				}
+				CR = Design_Request[ID == dw_record_insert_id];
+				thisapp.CreativeRequest.NewRequest(CR);
+			}
+			if(mailerCheck)
+			{
+				// _dd_type = "46442000131248449";
+				// ddRequestData.put("Design_and_Development_type",_dd_type);
+				// ddRequestData.put("Upload_Content",input.Mailer_request);
+				// dw_record_insert_id = thisapp.eventsWebinar.design_Development_insert(ddRequestData);
+				//
+				ddRequestData.put("Development_Type",wd_html_mailers);
+				ddRequestData.put("Request_Type","Web Development");
+				// change design and web development to web development 
+				ddRequestData.put("Design_Status","Not needed");
+				dw_record_insert_id = thisapp.eventsWebinar.eventDevelopmentInsert(ddRequestData);
+				if(creative_id == "")
+				{
+					creative_id = toString(dw_record_insert_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(dw_record_insert_id);
+				}
+				CR = Design_Request[ID == dw_record_insert_id];
+				thisapp.CreativeRequest.NewRequest(CR);
+			}
+			if(websiteCheck && input.landing_page == "No")
+			{
+				_w_type = "46442000131248522";
+				if(input.Events_or_Webinars == "Webinars")
+				{
+					_w_type = "46442000131248527";
+				}
+				wRequestData = Map();
+				wRequestData.put("Request_Title",input.Title);
+				wRequestData.put("Request_Type","Web Development");
+				wRequestData.put("ME_Solutions1",input.All_Solutions);
+				wRequestData.put("Product_Name2",input.Products_solution);
+				wRequestData.put("Team_Email1",input.Notify_Team);
+				wRequestData.put("Description",descrptn);
+				wRequestData.put("Upload_Content",input.Content_Docs);
+				wRequestData.put("Docs_Link",input.Document_link);
+				wRequestData.put("reviewed_apporved",input.Has_a_content_been_reviewed_approved);
+				wRequestData.put("Approval_ID",input.Content_approval_ID);
+				wRequestData.put("Priority",input.Priority);
+				wRequestData.put("Development_Type",_w_type);
+				wRequestData.put("Country",input.Country);
+				wRequestData.put("Language","English");
+				w_record_insert_id = thisapp.eventsWebinar.eventDevelopmentInsert(wRequestData);
+				if(creative_id == "")
+				{
+					creative_id = toString(w_record_insert_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(w_record_insert_id);
+				}
+				CR = Design_Request[ID == w_record_insert_id];
+				thisapp.CreativeRequest.NewRequest(CR);
+			}
+		}
+		else
+		{
+			sendmail
+			[
+				from :"me-dashboard@manageengine.com"
+				to :"elango.j@zohocorp.com"
+				subject :"[Error] Event Form - Design and Web Development"
+				message :"<table cellpadding=\"5\" style=\"font-size :  14px;\"><tbody><tr><th align=\"left\">Request for <br></th><td>" + input.Events_or_Webinars + " - " + input.Select_where_you_want + " <br></td></tr><tr><th align=\"left\">Request title <br></th><td>" + input.Title + "&nbsp; <br></td></tr><tr><th align=\"left\">Description <br></th><td>" + descrptn + "&nbsp; <br></td></tr><tr><th align=\"left\">Ticket ID <br></th><td>" + input.ID + "&nbsp; <br></td></tr><tr><th align=\"left\">Created By <br></th><td><a href=\"" + "mailto:" + input.ew_loginUser + "\"" + " target=\"_blank\" data-zeanchor=\"true\" style=\"color: rgb(0, 0, 238);\">" + input.ew_loginUser + " </a> <br></td></tr></tbody></table><div><br></div>"
+			]
+		}
+		// 	info creative_id;
+		input.creative_form_id = creative_id;
+	}
+}
+
+
+//>>>>>>> Marketing activities insert
+
+
+if(input.ew_loginUser == "elango.j@zohocorp.com*" || input.ew_loginUser == "suresh.j@zohocorp.com*" || input.ew_loginUser == "vdavid@zohocorp.com**" || input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	if(landing_page == "Yes" || (landing_page == "No" && Select_your_option == "Add to website"))
+	{
+		insert into Finalized_Events
+		[
+			Added_User=zoho.loginuser
+			Accommodation=input.Accommodation
+			Agenda=input.Agenda
+			All_Solutions=input.All_Solutions
+			Booth_Size=input.Booth_Size
+			Booth_Structure=input.Booth_Structure
+			Booth_number=input.Booth_number
+			CRM_auto_push=input.CRM_auto_push
+			City=input.City
+			Country=input.Country
+			Dates1=input.From_Date
+			Description=input.Description
+			Download_resources=input.Download_resources
+			Dress_Code=input.Dress_Code
+			Ends_on=input.To_Date
+			Event_category=input.Event_category
+			Events_Name=input.Event_Name
+			leadsource=input.leadsource
+			one_on_one_meeting=input.one_on_one_meeting
+			product_name=input.product_name
+		]
+	}
+}
+
+
+
+//>>>>>>>>> Geo calendar create integration
+
+
+if(input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	if(landing_page == "Yes" || (landing_page == "No" && Select_your_option == "Add to website"))
+	{
+		caelndarBaseUrl = "https://centralmarketing-709834020.development.catalystserverless.com/server/me-events-backstage-events/";
+		calendarStartDate = input.Start_String;
+		calendarStartDate = replaceAll(calendarStartDate,"-","");
+		calendarStartDate = replaceAll(calendarStartDate,":","");
+		calendarEndDate = input.End_String;
+		calendarEndDate = replaceAll(calendarEndDate,"-","");
+		calendarEndDate = replaceAll(calendarEndDate,":","");
+		//
+		calendarReq = Map();
+		calendarReq.put("title",input.Event_Name);
+		calendarReq.put("start",calendarStartDate);
+		calendarReq.put("end",calendarEndDate);
+		calendarReq.put("color",input.calendar_color_code);
+		if(calendarEndDate == calendarEndDate)
+		{
+			calendarReq.put("isallday",true);
+		}
+		else
+		{
+			calendarReq.put("isallday",false);
+		}
+		// 	aboutResponse = input.About_Event.htmlEncode();
+		calendarReq.put("description",input.About_Event);
+		// 	calendarReq.put("description",aboutResponse);
+		performGeoCalIntegrationUrl = caelndarBaseUrl + "calendar/createEvent";
+		resp = postUrl(performGeoCalIntegrationUrl,calendarReq);
+		output = resp.toMap();
+		status = output.get("status");
+		if(status == "failure")
+		{
+			// 			info output;
+			data = "applogic Execution Time Exceeded";
+			chatRowsMessage = List();
+			row = Map();
+			row.put("CMD Event form ID",input.ID);
+			row.put("Event Name",input.Event_Name);
+			row.put("Message",data);
+			chatRowsMessage.add(row);
+			notifierImageLink = "https://www.zoho.com//cliq/help/restapi/images/announce_icon.png";
+			notifierDescription = "Geo calendar integration is failed for below reqiuest";
+			channelname = "crmpushorbackstagemailerfailure";
+			table = {"type":"table","title":"","data":{"headers":{"CMD Event form ID","Event Name","Message"},"rows":chatRowsMessage}};
+			cliqMessage = {"text":notifierDescription,"card":{"theme":"10"},"bot":{"name":"Create - Geo Calendar integration - Failed","image":notifierImageLink},"slides":{table}};
+			cliqResponse = zoho.cliq.postToChannel(channelname,cliqMessage);
+		}
+		else if(status == "success")
+		{
+			details = output.get("details");
+			uid = details.get(0).get("id");
+			cEtag = details.get(0).get("etag");
+			input.etag = cEtag;
+			input.eventuid = uid;
+		}
+	}
+}
+
+//>>>>>>>>>> cmd 2.0 insert integration
+
+if(input.ew_loginUser == "elango.j@zohocorp.com" || input.ew_loginUser == "suresh.j@zohocorp.com" || input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	// ******************************************************************************************************************************************//
+	// ********* Speaker List add to the CMD creative description ********* //
+	SpeakerDetails = "";
+	SpeakerIndex = 1;
+	for each  i_list in Speakers
+	{
+		speakerTitle = "Speaker - " + SpeakerIndex + "\n";
+		SpeakerIndex = SpeakerIndex + 1;
+		speakerName = "Speaker Name: " + i_list.Speaker_Name + "\n";
+		speakerImage = "Speaker Image URL: " + i_list.Speaker_Image_Url + "\n";
+		speakerImageFile = "Speaker Image File: " + i_list.Speaker_Image_Upload + "\n";
+		speakerDesignation = "Speaker Designation: " + i_list.Speaker_Designation + "\n\n";
+		SpeakerDetails = SpeakerDetails + speakerTitle + speakerName + speakerImage + speakerImageFile + speakerDesignation;
+	}
+	// ********* Date List add to the CMD creative description ********* //
+	DateListDetails = "";
+	DateListIndex = 1;
+	for each  j_list in Dates_list
+	{
+		webinarDateListTitle = "Date List - " + DateListIndex + "\n";
+		DateListIndex = DateListIndex + 1;
+		getTimezoneName = Timezone[ID == j_list.Time_Zone];
+		webinarDateListDate = "Date: " + j_list.Date_field1 + "\n";
+		webinarDateListTime = "Time: " + j_list.Time.getSuffix(" ") + "\n";
+		webinarDateListTimezone = "Timezone: " + getTimezoneName.Timezone_Value + "\n";
+		webinarDateListWebinarURL = "Webinar URL: " + j_list.Events_Webinar_URL + "\n\n";
+		DateListDetails = DateListDetails + webinarDateListDate + webinarDateListTime + webinarDateListTimezone + webinarDateListWebinarURL;
+	}
+	//
+	getCountryDetails = Countries[ID == input.Country];
+	descrptn = "";
+	descrptn = descrptn + "Event Name: " + input.Event_Name + "\n";
+	descrptn = descrptn + "From Date: " + input.From_Date + "\n";
+	descrptn = descrptn + "To Date: " + input.To_Date + "\n";
+	descrptn = descrptn + "Country: " + getCountryDetails.Country + "\n";
+	descrptn = descrptn + "Category: " + input.Event_category + "\n";
+	descrptn = descrptn + "Venue Details: " + input.Venue_details + "\n";
+	if(landing_page == "No" && Select_your_option == "Add to website")
+	{
+		descrptn = descrptn + "Website url: " + input.Event_Webinar_URL + "\n";
+	}
+	descrptn = descrptn + "\n Description: " + input.Description + "\n";
+	if(SpeakerDetails != "")
+	{
+		descrptn = descrptn + "\n Speaker Details: \n" + SpeakerDetails + "\n";
+	}
+	if(DateListDetails != "")
+	{
+		descrptn = descrptn + "\n Date List Details: \n" + DateListDetails + "\n";
+	}
+	if(input.Event_category == "On-demand webinar")
+	{
+		descrptn = descrptn + "\n On demand webinar URL: \n" + input.On_demand_video_URL1 + "\n";
+	}
+	//  *******************************************************************************************************************************************//
+	// *********************************************************************************************************************************************//
+	websiteCheck = input.Select_your_option.contains("Add to website");
+	socialCheck = input.Select_your_option.contains("Add to social");
+	cardCheck = input.Select_your_option.contains("ID Card");
+	mailerCheck = input.Select_your_option.contains("HTML mailers");
+	bannerCheck = input.Select_your_option.contains("Home page banner");
+	cmd_2_Request_Type = "";
+	if(Request_Type == "Web Development")
+	{
+		cmd_2_Request_Type = "Development Request";
+	}
+	else if(Request_Type == "Design and Web Development")
+	{
+		cmd_2_Request_Type = "Design and Development Request";
+	}
+	//
+	event_page = "Event page";
+	webinar_page = "Webinar page";
+	idcard = "ID Cards";
+	html_mailers = "Mailer";
+	banner = "Web Banner";
+	//
+	selectedCountryForCMD = getCountryDetails.Country;
+	if(getCountryDetails.Country == "Online")
+	{
+		selectedCountryForCMD = "India";
+	}
+	req_notifyTeamList = "";
+	req_solution = "";
+	req_product = "";
+	req_country = selectedCountryForCMD;
+	//
+	get_solution = ME_Solutions[ID == input.All_Solutions];
+	req_solution = get_solution.Solution;
+	if(req_solution == "ManageEngine")
+	{
+		req_product = "ManageEngine";
+	}
+	else
+	{
+		// 		get_product = ME_Products[ID == input.Products_solution];
+		// 		req_product = get_product.Product_name;
+		// *** get product list *** //
+		productSelected = input.Products_solution.toList(",");
+		for each  i in productSelected
+		{
+			get_product = ME_Solution_Products[ID == i];
+			if(get_product.count(ID) > 0)
+			{
+				if(req_product == "")
+				{
+					req_product = get_product.Products_Name;
+				}
+				else
+				{
+					req_product = req_product + "," + get_product.Products_Name;
+				}
+			}
+		}
+	}
+	// *** get team list *** //
+	teamEmailSelected = input.Notify_Team.toList(",");
+	for each  i in teamEmailSelected
+	{
+		getEmail = Team_Email[ID == i];
+		if(getEmail.count(ID) > 0)
+		{
+			if(req_notifyTeamList == "")
+			{
+				req_notifyTeamList = getEmail.Team_Email;
+			}
+			else
+			{
+				req_notifyTeamList = req_notifyTeamList + "," + getEmail.Team_Email;
+			}
+		}
+	}
+	//
+	//
+	creative_id = "";
+	wRequestData = Map();
+	wRequestData.put("e","isjmasd89weklcgasd89q3r");
+	wRequestData.put("title",input.Title);
+	wRequestData.put("description",descrptn);
+	wRequestData.put("request_type",cmd_2_Request_Type);
+	wRequestData.put("requester_email",input.ew_loginUser);
+	wRequestData.put("has_the_content_been_reviewed_approved",input.Has_a_content_been_reviewed_approved);
+	wRequestData.put("review_app_document",input.Content_approval_ID);
+	wRequestData.put("notify_Team",req_notifyTeamList);
+	wRequestData.put("solution",req_solution);
+	wRequestData.put("product_name",req_product);
+	wRequestData.put("country",req_country);
+	wRequestData.put("priority",input.Priority);
+	wRequestData.put("reason_priority",input.Reason_for_Urgent_High_priority);
+	wRequestData.put("review_app_document_id",input.Choose_your_document_from_ME_Review_app);
+	wRequestData.put("review_app_document_title",input.Review_app_document_title);
+	wRequestData.put("review_app_document_link",input.Document_link);
+	//
+	if(Request_Type == "Web Development")
+	{
+		if(websiteCheck)
+		{
+			wRequestData.put("content_type",event_page);
+			if(input.Events_or_Webinars == "Webinars")
+			{
+				wRequestData.put("content_type",webinar_page);
+			}
+			cmd_creative_id = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"add");
+			if(creative_id == "")
+			{
+				creative_id = toString(cmd_creative_id);
+			}
+			else
+			{
+				creative_id = creative_id + ", " + toString(cmd_creative_id);
+			}
+		}
+		if(mailerCheck)
+		{
+			wRequestData.put("content_type",html_mailers);
+			cmd_creative_id = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"add");
+			if(creative_id == "")
+			{
+				creative_id = toString(cmd_creative_id);
+			}
+			else
+			{
+				creative_id = creative_id + ", " + toString(cmd_creative_id);
+			}
+		}
+		input.creative_form_id = creative_id;
+	}
+	else if(Request_Type == "Design and Web Development")
+	{
+		if(input.landing_page != "" || input.landing_page != null)
+		{
+			if(input.landing_page == "Yes" && input.Events_or_Webinars == "Events")
+			{
+				wRequestData.put("content_type",event_page);
+				cmd_creative_id = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"add");
+				if(creative_id == "")
+				{
+					creative_id = toString(cmd_creative_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(cmd_creative_id);
+				}
+			}
+			if(input.landing_page == "Yes" && input.Events_or_Webinars == "Webinars")
+			{
+				wRequestData.put("content_type",webinar_page);
+				cmd_creative_id = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"add");
+				if(creative_id == "")
+				{
+					creative_id = toString(cmd_creative_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(cmd_creative_id);
+				}
+			}
+			if(bannerCheck)
+			{
+				wRequestData.put("content_type",banner);
+				cmd_creative_id = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"add");
+				if(creative_id == "")
+				{
+					creative_id = toString(cmd_creative_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(cmd_creative_id);
+				}
+			}
+			if(mailerCheck)
+			{
+				wRequestData.put("content_type",html_mailers);
+				cmd_creative_id = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"add");
+				if(creative_id == "")
+				{
+					creative_id = toString(cmd_creative_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(cmd_creative_id);
+				}
+			}
+			if(websiteCheck && input.landing_page == "No")
+			{
+				wRequestData.put("content_type",event_page);
+				if(input.Events_or_Webinars == "Webinars")
+				{
+					wRequestData.put("content_type",webinar_page);
+				}
+				cmd_creative_id = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"add");
+				if(creative_id == "")
+				{
+					creative_id = toString(cmd_creative_id);
+				}
+				else
+				{
+					creative_id = creative_id + ", " + toString(cmd_creative_id);
+				}
+			}
+		}
+		else
+		{
+			sendmail
+			[
+				from :"me-dashboard@manageengine.com"
+				to :"elango.j@zohocorp.com"
+				subject :"[Error] Event Form - Design and Web Development"
+				message :"<table cellpadding=\"5\" style=\"font-size :  14px;\"><tbody><tr><th align=\"left\">Request for <br></th><td>" + input.Events_or_Webinars + " - " + input.Select_where_you_want + " <br></td></tr><tr><th align=\"left\">Request title <br></th><td>" + input.Title + "&nbsp; <br></td></tr><tr><th align=\"left\">Description <br></th><td>" + descrptn + "&nbsp; <br></td></tr><tr><th align=\"left\">Ticket ID <br></th><td>" + input.ID + "&nbsp; <br></td></tr><tr><th align=\"left\">Created By <br></th><td><a href=\"" + "mailto:" + input.ew_loginUser + "\"" + " target=\"_blank\" data-zeanchor=\"true\" style=\"color: rgb(0, 0, 238);\">" + input.ew_loginUser + " </a> <br></td></tr></tbody></table><div><br></div>"
+			]
+		}
+		input.creative_form_id = creative_id;
+	}
+}
+
+
+//>>>>>>>>>>>  2024 statistics
+
+
+insert into Events_Statistics_2024
+[
+	Added_User=zoho.loginuser
+	Comments=input.Description
+	Country=input.Country
+	Event_Id=input.ID
+	Event_Type=input.Event_category
+	Event_from_Date=input.From_Date
+	Event_name=input.Event_Name
+	Event_to_date=input.To_Date
+	Region=input.Region
+	Team="ManageEngine"
+	page_url=input.Event_Webinar_URL
+	isCountUpdated=0
+]
+info input.ID;
+
+

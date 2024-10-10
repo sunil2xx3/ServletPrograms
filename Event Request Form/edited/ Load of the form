@@ -1,0 +1,498 @@
+//>>>>>>>>>>>>>Listing Status Handling-Edit
+
+
+loginUserEmail = zoho.loginuserid;
+roleStatus = thisapp.com.getUserRole(loginUserEmail);
+status = roleStatus.get("status");
+userRole = roleStatus.get("userRole");
+if(status == true)
+{
+	show Approval_Status;
+	if(landing_page == "Yes")
+	{
+		show Web_development_completed;
+	}
+	else
+	{
+		input.Web_development_completed = "";
+		hide Web_development_completed;
+	}
+}
+else
+{
+	hide Approval_Status;
+	hide Web_development_completed;
+}
+
+
+//>>>>>>>>>>>   Edit-onload
+
+///SCRIPT 1
+input.update_check_on_edit = "";
+hide Select_where_you_want;
+hide Events_more_details;
+hide work_type;
+hide Speakers;
+hide Dates_list;
+hide CRM;
+hide Social;
+hide Design_fields;
+hide Organizer_fields;
+hide Products_solution;
+hide On_demand_video_URL1;
+hide Timezone;
+hide Organizers_Emails;
+hide Event_Webinar_URL;
+hide Has_a_content_been_reviewed_approved;
+hide Content_approval_ID;
+hide Event_thumbnail_image;
+hide Event_Logo_Link;
+hide Agenda_URL;
+hide Comments;
+hide On_demand_video_URL1;
+hide Webinar_Duration;
+hide Display_pages;
+hide website_listing_message;
+hide Event_registration_link;
+hide Time_of_Event;
+hide Creatives_to_Upload;
+hide Timezone1;
+hide Social_Media;
+hide Where_to_banner;
+hide home_page_banner_content;
+hide request_type_notes;
+hide About_Event;
+hide form_add_edit_mode;
+hide Reason_for_Urgent_High_priority;
+hide creative_form_id;
+constVar = thisapp.eventsWebinar.constantVariable();
+Select_your_option.select(input.Select_your_option);
+Event_category.select(input.Event_category);
+// ***************************** Work type checkbox / event & webinar section ***************************** //
+// if(Events_or_Webinars == "Events")
+// {
+// }
+// else if(Events_or_Webinars == "Webinars")
+// {
+// 	hide Events_more_details;
+// 	// 	hide Event_type;
+// 	hide Venue_details;
+// 	show Timezone;
+// 	hide Organizer_fields;
+// 	// **********************************
+// 	show Webinar_Duration;
+// 	show Display_pages;
+// 	// **********************************
+// 	show Speakers;
+// 	show Dates_list;
+// }
+//
+//
+// ***************************** Landing page handling ***************************** //
+if(landing_page == "Yes")
+{
+	for each  value in constVar
+	{
+		if(value.get('landing_page') == 'yes')
+		{
+			input.Select_your_option:ui.add(value.get('option'));
+		}
+	}
+	// *********************************************************** //
+	hide Event_Webinar_URL;
+	hide Social;
+	hide Agenda_URL;
+	// *********************************************************** //
+	show Request_Type;
+	//show work_type;
+	show Title;
+	show Event_Name;
+	show Notify_Team;
+	show All_Solutions;
+	show From_Date;
+	show To_Date;
+	show Description;
+	show Document_link;
+	show Content_Docs;
+	show Has_a_content_been_reviewed_approved;
+	show Content_approval_ID;
+	show Organizers_Emails;
+	show Event_Webinar_contact_details;
+	show Country;
+	show Region;
+	show Event_category;
+	show City;
+	show Venue_details;
+	show CRM;
+	show Priority;
+	show link_me_content_review;
+	show content_approval_status;
+	show Speakers;
+	show Dates_list;
+	show About_Event;
+	// ********************************************************************************************************************** //
+	// ********************************************************************************************************************** //
+	if(input.Events_or_Webinars == "Events")
+	{
+		show Events_more_details;
+		show Organizer_fields;
+		show Venue_details;
+	}
+	else if(input.Events_or_Webinars == "Webinars")
+	{
+		hide Events_more_details;
+		hide Venue_details;
+	}
+	else
+	{
+		hide Events_more_details;
+		hide Venue_details;
+	}
+}
+else if(landing_page == "No")
+{
+	for each  value in constVar
+	{
+		input.Select_your_option:ui.add(value.get('option'));
+	}
+	// *********************************************************** //
+	hide Document_link;
+	hide Content_Docs;
+	hide Has_a_content_been_reviewed_approved;
+	hide Content_approval_ID;
+	hide Organizers_Emails;
+	hide Event_Webinar_contact_details;
+	hide Organizer_fields;
+	hide CRM;
+	hide Social;
+	hide Events_more_details;
+	hide link_me_content_review;
+	hide content_approval_status;
+	// *********************************************************** //
+	show Request_Type;
+	show Title;
+	show Event_Name;
+	show Notify_Team;
+	show Event_Webinar_URL;
+	show All_Solutions;
+	show From_Date;
+	show To_Date;
+	show Description;
+	show Country;
+	show Region;
+	show Event_category;
+	show City;
+	show Venue_details;
+	show Timezone;
+	show Agenda_URL;
+	show Priority;
+	show About_Event;
+	//
+	if(Events_or_Webinars == "Events")
+	{
+		show Venue_details;
+	}
+	else
+	{
+		hide Venue_details;
+	}
+}
+else if(landing_page == "" || landing_page == null)
+{
+	input.Title = "";
+	input.Event_Name = "";
+	input.Notify_Team = null;
+	input.All_Solutions = null;
+	input.Products_solution = null;
+	input.From_Date = null;
+	input.To_Date = null;
+	input.Description = "";
+	input.Timezone = null;
+	input.Country = null;
+	input.Event_category = null;
+	input.Region = null;
+	input.Request_Type = null;
+	input.Document_link = "";
+	input.Venue_details = "";
+	input.Event_Webinar_URL = "";
+	input.Agenda_URL = "";
+	input.City = "";
+	input.Event_thumbnail_image = "";
+	input.Event_Logo_Link = "";
+	input.Content_Docs = "";
+	input.Content_approval_ID = "";
+	input.Organizers_Emails = null;
+	input.Event_Webinar_contact_details = "";
+	input.Keywords = "";
+	input.one_on_one_meeting = "";
+	input.Agenda = "";
+	input.Download_resources = "";
+	input.Mailer_request = "";
+	input.ID_card_print = "";
+	input.Webinar_Duration = "";
+	input.Display_pages = "";
+	input.On_demand_video_URL1 = "";
+	input.CRM_auto_push = "";
+	input.product_name = "";
+	input.leadsource = "";
+	input.type = "";
+	input.Platforms = "";
+	input.Booth_number = "";
+	input.Booth_Size = "";
+	input.Booth_Structure = "";
+	input.Event_Floor_Plan = "";
+	input.Related_Event_Campaign_if_any = "";
+	input.Accommodation = "";
+	input.Dress_Code = "";
+	input.Leads = "";
+	input.Onsite_Contact_Details = "";
+	input.People_Traveling = "";
+	input.Freebies_and_Quantity = "";
+	input.Press_Release_for_the_event = "";
+	input.Signed_Contract = "";
+	input.Speakers.clear();
+	input.Dates_list.clear();
+	input.Priority = "Low";
+	// ************** 	
+	hide Title;
+	hide Event_Name;
+	hide Notify_Team;
+	hide All_Solutions;
+	hide Products_solution;
+	hide From_Date;
+	hide To_Date;
+	hide Description;
+	hide Timezone;
+	hide Country;
+	hide Event_category;
+	hide Region;
+	hide Request_Type;
+	hide Document_link;
+	hide Content_Docs;
+	hide Has_a_content_been_reviewed_approved;
+	hide Content_approval_ID;
+	hide Organizers_Emails;
+	hide Event_Webinar_contact_details;
+	hide Keywords;
+	hide one_on_one_meeting;
+	hide Agenda;
+	hide ID_card_print;
+	hide Download_resources;
+	hide Mailer_request;
+	hide Organizer_fields;
+	hide Event_Webinar_URL;
+	hide Agenda_URL;
+	hide City;
+	hide Event_thumbnail_image;
+	hide Event_Logo_Link;
+	hide Venue_details;
+	hide Design_fields;
+	hide Social;
+	hide CRM;
+	hide Speakers;
+	hide Dates_list;
+	hide Events_more_details;
+	hide Priority;
+	hide link_me_content_review;
+	hide content_approval_status;
+	hide Thumbnail_Link;
+	hide Select_your_option;
+}
+// ***************************** Request for handling ***************************** //
+// input.Events_or_Webinars = input.Events_or_Webinars;
+// ***************************** Solution handling ***************************** //
+getSolutionDetails = ME_Solutions[ID == input.All_Solutions];
+if(getSolutionDetails.Solution == "ManageEngine")
+{
+	hide Products_solution;
+}
+else if(input.All_Solutions != null)
+{
+	show Products_solution;
+}
+// ***************************** Has_a_content_been_reviewed_approved handling ***************************** //
+if(input.Has_a_content_been_reviewed_approved == "Yes")
+{
+	enable Content_approval_ID;
+	show Content_approval_ID;
+	show link_me_content_review;
+	show content_approval_status;
+	input.content_approval_status = "<br>";
+}
+else if(input.Has_a_content_been_reviewed_approved == "No")
+{
+	hide link_me_content_review;
+	input.content_approval_status = "<br>";
+	hide link_me_content_review;
+	hide content_approval_status;
+	hide Content_approval_ID;
+}
+// ***************************** Approval status button handling ***************************** //
+if(input.Approval_Status == "Pending")
+{
+	disable Approval_Status;
+}
+
+// SCRIPT 2 >>>>>>>>
+
+loginUserEmail = zoho.loginuserid;
+roleStatus = thisapp.com.getUserRole(loginUserEmail);
+userRole = roleStatus.get("userRole");
+//if(input.Approval_Status == "Approve" || input.Approval_Status == "Event Closed" || input.Approval_Status == "Removed from list" || userRole != "Admin")
+if(userRole == "Admin" && loginUserEmail == "elango.j@zohocorp.com")
+{
+	enable creative_form_id;
+	show creative_form_id;
+}
+if(input.Approval_Status == "Approve" || input.Approval_Status == "Event Closed" || userRole != "Admin")
+{
+	disable Select_where_you_want;
+	disable Title;
+	disable Event_Name;
+	disable Notify_Team;
+	disable All_Solutions;
+	disable Products_solution;
+	disable From_Date;
+	disable To_Date;
+	disable Description;
+	disable Timezone;
+	disable Country;
+	disable Event_category;
+	disable Region;
+	disable Request_Type;
+	disable work_type;
+	disable Document_link;
+	disable Venue_details;
+	disable Event_Webinar_URL;
+	disable Agenda_URL;
+	disable City;
+	disable Event_thumbnail_image;
+	disable Content_Docs;
+	disable Content_approval_ID;
+	disable Organizers_Emails;
+	disable Event_Webinar_contact_details;
+	disable Keywords;
+	disable one_on_one_meeting;
+	disable Agenda;
+	disable Download_resources;
+	disable Mailer_request;
+	disable ID_card_print;
+	disable Webinar_Duration;
+	disable Display_pages;
+	disable On_demand_video_URL1;
+	disable CRM_auto_push;
+	disable product_name;
+	disable leadsource;
+	disable type;
+	disable Platforms;
+	disable Booth_number;
+	disable Booth_Size;
+	disable Booth_Structure;
+	disable Event_Floor_Plan;
+	disable Related_Event_Campaign_if_any;
+	disable Accommodation;
+	disable Dress_Code;
+	disable Leads;
+	disable Onsite_Contact_Details;
+	disable People_Traveling;
+	disable Freebies_and_Quantity;
+	disable Press_Release_for_the_event;
+	disable Signed_Contract;
+	disable Speakers.Speaker_Designation;
+	disable Speakers.Speaker_Name;
+	disable Speakers.Speaker_Image_Url;
+	disable Speakers.Speaker_Image_Upload;
+	disable Speakers.Speaker_Email;
+	disable Dates_list.Time_Zone;
+	disable Dates_list.Time;
+	disable Dates_list.Date_field1;
+	disable Dates_list.Events_Webinar_URL;
+	disable Priority;
+	disable Events_or_Webinars;
+	disable Has_a_content_been_reviewed_approved;
+	disable landing_page;
+	disable Select_your_option;
+	disable Thumbnail_Link;
+	disable Event_registration_link;
+	disable Time_of_Event;
+	disable Timezone1;
+	disable Creatives_to_Upload;
+	primary = "<style>.zc-live-primary-btn{visibility:hidden;}</style>";
+	secondary = "<style>.zc-live-secondary-btn{visibility:hidden;}</style>";
+	// 	show Comments;
+	disable About_Event;
+	disable Web_development_completed;
+	disable Event_Logo_Link;
+}
+if(input.Approval_Status == "Pending" && loginUserEmail == input.ew_loginUser)
+{
+	enable From_Date;
+	enable To_Date;
+	enable Event_Name;
+	enable Description;
+	enable Timezone;
+	enable Event_Webinar_URL;
+	enable Agenda_URL;
+	enable City;
+	enable Venue_details;
+	enable Region;
+	enable Country;
+	enable Event_category;
+	enable All_Solutions;
+	enable Products_solution;
+	enable Thumbnail_Link;
+	enable Organizers_Emails;
+	if(landing_page == "Yes")
+	{
+		enable Speakers.Speaker_Designation;
+		enable Speakers.Speaker_Name;
+		enable Speakers.Speaker_Image_Url;
+		enable Speakers.Speaker_Image_Upload;
+		enable Speakers.Speaker_Email;
+		//
+		enable Dates_list.Time_Zone;
+		enable Dates_list.Time;
+		enable Dates_list.Date_field1;
+		enable Dates_list.Events_Webinar_URL;
+		if(Events_or_Webinars == "Events")
+		{
+			enable Keywords;
+			enable one_on_one_meeting;
+			enable Agenda;
+			enable Download_resources;
+			enable ID_card_print;
+			//
+			enable CRM_auto_push;
+			enable product_name;
+			enable leadsource;
+			enable type;
+			//
+			enable Accommodation;
+			enable Dress_Code;
+			enable Leads;
+			enable Onsite_Contact_Details;
+			enable People_Traveling;
+			enable Freebies_and_Quantity;
+			enable Press_Release_for_the_event;
+			enable Signed_Contract;
+		}
+		else if(Events_or_Webinars == "Webinars")
+		{
+			enable CRM_auto_push;
+			enable product_name;
+			enable leadsource;
+			enable type;
+		}
+	}
+	//
+	socialCheck = input.Select_your_option.contains("Add to social");
+	if(socialCheck)
+	{
+		enable Event_registration_link;
+		enable Time_of_Event;
+		enable Timezone1;
+		enable Creatives_to_Upload;
+		enable Platforms;
+	}
+}
+

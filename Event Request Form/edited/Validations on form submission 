@@ -1,0 +1,23 @@
+// >>>>>>>>Approval Tracking (Edit)
+
+
+if(old.Approval_Status != input.Approval_Status)
+{
+	thisapp.eventsWebinar.insertApprovalTracking(input.Approval_Status,input.ID);
+}
+// ------ update check on edit --------
+if(old.Event_Name != input.Event_Name || old.From_Date != input.From_Date || old.To_Date != input.To_Date || old.Country != input.Country || old.Event_category != input.Event_category || old.Venue_details != input.Venue_details || old.Event_Webinar_URL != input.Event_Webinar_URL || old.Description != input.Description)
+{
+	input.update_check_on_edit = "yes";
+}
+//
+//
+loginUserEmail = zoho.loginuserid;
+roleStatus = thisapp.com.getUserRole(loginUserEmail);
+userRole = roleStatus.get("userRole");
+//if(input.Approval_Status == "Approve" || input.Approval_Status == "Event Closed" || input.Approval_Status == "Removed from list" || userRole != "Admin")
+if(input.Approval_Status == "Approve" || input.Approval_Status == "Event Closed" || input.Approval_Status == "Removed from list" && userRole != "Admin")
+{
+	alert "After approval, you are not allowed to update the request.";
+	cancel submit;
+}

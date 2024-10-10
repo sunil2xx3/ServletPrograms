@@ -1,0 +1,10 @@
+    Events and Webinars request Edited Field rules Hide delete button
+
+Actions will be executed on form load and on user input of any of the fields participating in the condition.Learn more
+
+    Execute only if 
+    Approval_Status == "Approve"
+        Hide subform delete entry [Dates_list, Speakers]
+    Execute only if 
+    Approval_Status == "Approve"
+        Hide subform add entry [Dates_list, Speakers] 

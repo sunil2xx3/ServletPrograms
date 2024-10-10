@@ -1,0 +1,125 @@
+//>>>>>>>>. Delete (Geo Calendar Event)
+
+//  ------>SCRIPT !
+
+if(input.ew_loginUser == "elango.j@zohocorp.com")
+{
+	// do nothing
+}
+else
+{
+	websiteCheck = input.Select_your_option.contains("Add to website");
+	if(landing_page == "Yes" || (landing_page == "No" && websiteCheck))
+	{
+		// 	myMap = Map();
+		// 	myMap.put("eventUid",input.eventuid);
+		// 	myMap.put("etag",input.etag);
+		// 	myMap.put("from_date",input.From_Date);
+		// 	myMap.put("to_date",input.To_Date);
+		// 	myMap.put("title",input.Title);
+		//response = postUrl("https://flow.zoho.com/702425537/flow/webhook/incoming?zapikey=1001.d1988e0588b21f8d90e39f1309db753c.44ff137b4b9856acd1cd67f1f154cd35&isdebug=false",myMap);
+		// 	******** New Code ********** //
+		calendarReq = Map();
+		calendarReq.put("uid",input.eventuid);
+		calendarReq.put("etag",input.etag);
+		calendarReq.put("token","lkobisdhfhwf");
+		caelndarBaseUrl = "https://centralmarketing-709834020.development.catalystserverless.com/server/me-events-backstage-events/";
+		performGeoCalIntegrationUrl = caelndarBaseUrl + "calendar/deleteEvent";
+		response = postUrl(performGeoCalIntegrationUrl,calendarReq);
+		output = response.toMap();
+		status = output.get("status");
+		if(status == "failure")
+		{
+			data = "Error in deleting calendar event";
+			chatRowsMessage = List();
+			row = Map();
+			row.put("CMD Event form ID",input.ID);
+			row.put("Event Name",input.Event_Name);
+			row.put("Message",data);
+			chatRowsMessage.add(row);
+			notifierImageLink = "https://www.zoho.com//cliq/help/restapi/images/announce_icon.png";
+			notifierDescription = "Geo calendar integration is failed for below reqiuest";
+			channelname = "crmpushorbackstagemailerfailure";
+			table = {"type":"table","title":"","data":{"headers":{"CMD Event form ID","Event Name","Message"},"rows":chatRowsMessage}};
+			cliqMessage = {"text":notifierDescription,"card":{"theme":"10"},"bot":{"name":"Delete - Geo Calendar integration - Failed","image":notifierImageLink},"slides":{table}};
+			cliqResponse = zoho.cliq.postToChannel(channelname,cliqMessage);
+		}
+	}
+	// **************** Delete Creative form request ************************** //
+	if(input.creative_form_id != "" || input.creative_form_id != null)
+	{
+		// delete from Design_Request[ID == input.creative_form_id.tolong()];
+		editCreativeId = input.creative_form_id;
+		myList = editCreativeId.toList(", ");
+		for each  creative_id in myList
+		{
+			getCreativeDetails = Design_Request[ID == creative_id];
+			if(getCreativeDetails.count() > 0)
+			{
+				delete from Design_Request[ID == creative_id.tolong()];
+			}
+		}
+	}
+}
+
+// --->SCRIPT 2
+
+if(input.ew_loginUser == "elango.j@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	// ******************* 1. [ Deleted ] Send Email to Notify team *****************************
+	recordMap = Map();
+	recordMap.put("mode","deleted");
+	recordMap.put("ID",input.ID);
+	recordMap.put("Events_or_Webinars",input.Events_or_Webinars);
+	recordMap.put("Select_where_you_want",input.Select_where_you_want);
+	recordMap.put("Request_Type",input.Request_Type);
+	recordMap.put("Title",input.Title);
+	recordMap.put("Description",input.Description);
+	recordMap.put("Event_category",input.Event_category);
+	recordMap.put("Priority",input.Priority);
+	recordMap.put("ew_loginUser",input.ew_loginUser);
+	recordMap.put("Comments",input.Comments);
+	recordMap.put("Added_User",input.Added_User);
+	recordMap.put("Added_Time",input.Added_Time);
+	recordMap.put("Select_your_option",input.Select_your_option);
+	recordMap.put("landing_page",input.landing_page);
+	recordMap.put("Event_Name",input.Event_Name);
+	//
+	//
+	if(Notify_Team != null)
+	{
+		items = input.Notify_Team.toListString();
+		for each  i in items
+		{
+			newText = trim(i);
+			emailID = newText.toNumber();
+			getNotifyEmail = Team_Email[ID = emailID];
+			emailToSend = getNotifyEmail.Team_Email;
+			recordMap.put("emailToSend",emailToSend);
+			thisapp.eventsWebinar.requestCreatedMail(recordMap);
+		}
+	}
+	// ************** 2. Send Email to ME social team for listing **************************** //
+	socialCheck = input.Select_your_option.contains("Add to social");
+	if(socialCheck)
+	{
+		recordMap.put("from_date",input.From_Date);
+		recordMap.put("to_date",input.To_Date);
+		recordMap.put("Time_of_Event",input.Time_of_Event);
+		recordMap.put("Platforms",input.Platforms);
+		recordMap.put("Event_registration_link",input.Event_registration_link);
+		recordMap.put("Timezone1",input.Timezone1);
+		recordMap.put("Creatives_to_Upload",input.Creatives_to_Upload);
+		recordMap.put("emailToSend","elango.j+social@zohotest.com");
+		thisapp.eventsWebinar.socialTeamMail(recordMap);
+	}
+	// ************** 3. Send Email to ME-Development (notification) / To elango (check flow working for some days) **************************** //
+	// **** Notify(elango.j+eventformDeleted@zohotest.com) ****
+	recordMap.put("emailToSend","elango.j+eventformDeleted@zohotest.com");
+	thisapp.eventsWebinar.requestCreatedMail(recordMap);
+}

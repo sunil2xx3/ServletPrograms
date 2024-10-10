@@ -1,0 +1,1400 @@
+//>>>>>>>>>Reviewed content - Handling      1111
+if(input.Has_a_content_been_reviewed_approved == "Yes")
+{
+	// 	enable Content_approval_ID;
+	// 	show Content_approval_ID;
+	// 	show link_me_content_review;
+	// 	show content_approval_status;
+	// 	input.Content_approval_ID = "";
+	// 	input.content_approval_status = "<br>";
+	show Document_link;
+	show Choose_your_document_from_ME_Review_app;
+}
+else if(input.Has_a_content_been_reviewed_approved == "No")
+{
+	// 	link_me_review = "";
+	// 	// 	disable link_me_content_review;
+	// 	hide link_me_content_review;
+	// 	input.content_approval_status = "<br>";
+	// 	hide link_me_content_review;
+	// 	hide content_approval_status;
+	// 	hide Content_approval_ID;
+	hide Choose_your_document_from_ME_Review_app;
+	hide Document_link;
+}
+disable Content_approval_ID;
+hide Content_approval_ID;
+hide link_me_content_review;
+hide content_approval_status;
+input.Content_approval_ID = "";
+input.content_approval_status = "<br>";
+
+
+// >>>>>>>Web development completed  2222
+
+if(landing_page == "Yes")
+{
+	if(Web_development_completed == "Yes")
+	{
+		show Event_Webinar_URL;
+		show Agenda_URL;
+		show Thumbnail_Link;
+	}
+	else
+	{
+		hide Event_Webinar_URL;
+		hide Agenda_URL;
+		hide Thumbnail_Link;
+	}
+}
+
+
+// >>>>>Landing Page Handling  3333
+
+// ----> SCRIPT 1
+notes_for_dd_type = "<span style=\"color: rgb(0, 153, 0);\">This request will complete by design and web development team.</span>";
+if(Events_or_Webinars != "" || Events_or_Webinars != null)
+{
+	// ******************** Important Starts here ******************** //
+	roleStatus = thisapp.com.getUserRole(zoho.loginuserid);
+	status = roleStatus.get("status");
+	userRole = roleStatus.get("userRole");
+	// ******************** Important Ends here ******************** //
+	constVar = thisapp.eventsWebinar.constantVariable();
+	// ************************** 1. landing page handling ********************************** //
+	if(landing_page == "Yes")
+	{
+		show Select_your_option;
+		show mailer_message;
+		input.Request_Type = "Design and Web Development";
+		for each  value in constVar
+		{
+			if(value.get('landing_page') == 'yes')
+			{
+				// if((value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars") || value.get('value') == 'homeBanner')
+				if(value.get('value') == 'idCard' || value.get('value') == 'homeBanner')
+				{
+					// *** do something ***
+				}
+				else
+				{
+					input.Select_your_option:ui.add(value.get('option'));
+				}
+			}
+		}
+		// *********************************************************** //
+		input.Agenda_URL = "";
+		input.Event_Webinar_URL = "";
+		input.Platforms = "";
+		//
+		hide Event_Webinar_URL;
+		hide Social;
+		hide Agenda_URL;
+		hide Display_pages;
+		hide Webinar_Duration;
+		// *********************************************************** //
+		show Request_Type;
+		show Title;
+		show Event_Name;
+		show About_Event;
+		show Notify_Team;
+		show All_Solutions;
+		show From_Date;
+		show To_Date;
+		show Description;
+		show Document_link;
+		show Content_Docs;
+		show Has_a_content_been_reviewed_approved;
+		show Organizers_Emails;
+		show Event_Webinar_contact_details;
+		show Country;
+		show Region;
+		show Event_category;
+		show City;
+		show Venue_details;
+		show CRM;
+		show Priority;
+		if(Has_a_content_been_reviewed_approved == "Yes")
+		{
+			// 			show Content_approval_ID;
+			// 			show content_approval_status;
+			// 			show link_me_content_review;
+			show Choose_your_document_from_ME_Review_app;
+			show Document_link;
+		}
+		else
+		{
+			// 			hide Content_approval_ID;
+			// 			hide content_approval_status;
+			// 			hide link_me_content_review;
+			hide Choose_your_document_from_ME_Review_app;
+			hide Document_link;
+		}
+		input.website_check = "yes";
+		// ********************************************************************************************************************** //
+		// ********************************************************************************************************************** //
+		if(input.Events_or_Webinars == "Events")
+		{
+			show Events_more_details;
+			show Organizer_fields;
+			show City;
+		}
+		else if(input.Events_or_Webinars == "Webinars")
+		{
+			hide Events_more_details;
+			hide Venue_details;
+			hide City;
+			show Timezone;
+		}
+		show website_listing_message;
+		show Speakers;
+		show Dates_list;
+		//
+		input.request_type_notes = notes_for_dd_type;
+		show request_type_notes;
+		//
+		//
+		if(Events_or_Webinars == "Webinars")
+		{
+			// getCountryDetails = Countries[Country == "India"];
+			getCountryDetails = Countries[Country == "Online"];
+			info getCountryDetails.ID;
+			input.Country = getCountryDetails.ID;
+			input.Region = "All region";
+			hide Country;
+			hide Region;
+		}
+		else
+		{
+			show Country;
+			show Region;
+		}
+	}
+	else if(landing_page == "No")
+	{
+		show Select_your_option;
+		show mailer_message;
+		input.Request_Type = "";
+		for each  value in constVar
+		{
+			// input.Select_your_option:ui.add(value.get('option'));
+			// if((value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars") || value.get('value') == 'homeBanner')
+			if(value.get('value') == 'idCard' || value.get('value') == 'homeBanner')
+			{
+				// *** do something ***
+			}
+			else
+			{
+				input.Select_your_option:ui.add(value.get('option'));
+			}
+		}
+		//
+		// *********************************************************** //
+		//work_type.deselectall();
+		input.Document_link = "";
+		input.Content_Docs = "";
+		input.Content_approval_ID = "";
+		input.Organizers_Emails = null;
+		input.Event_Webinar_contact_details = "";
+		input.Keywords = "";
+		input.one_on_one_meeting = "";
+		input.Agenda = "";
+		input.Download_resources = "";
+		input.Mailer_request = "";
+		input.ID_card_print = "";
+		input.Webinar_Duration = "";
+		input.Display_pages = "";
+		input.On_demand_video_URL1 = "";
+		input.CRM_auto_push = "";
+		input.product_name = "";
+		input.leadsource = "";
+		input.type = "";
+		input.Platforms = "";
+		input.Booth_number = "";
+		input.Booth_Size = "";
+		input.Booth_Structure = "";
+		input.Event_Floor_Plan = "";
+		input.Related_Event_Campaign_if_any = "";
+		input.Accommodation = "";
+		input.Dress_Code = "";
+		input.Leads = "";
+		input.Onsite_Contact_Details = "";
+		input.People_Traveling = "";
+		input.Freebies_and_Quantity = "";
+		input.Press_Release_for_the_event = "";
+		input.Signed_Contract = "";
+		// ************************************* //
+		hide Document_link;
+		hide Content_Docs;
+		hide Has_a_content_been_reviewed_approved;
+		hide Content_approval_ID;
+		hide Organizers_Emails;
+		hide Event_Webinar_contact_details;
+		hide Organizer_fields;
+		hide CRM;
+		hide Social;
+		hide Events_more_details;
+		hide link_me_content_review;
+		hide content_approval_status;
+		// *********************************************************** //
+		show Request_Type;
+		show Title;
+		show Event_Name;
+		show About_Event;
+		show Notify_Team;
+		show Event_Webinar_URL;
+		show All_Solutions;
+		show From_Date;
+		show To_Date;
+		show Description;
+		show Country;
+		show Region;
+		show Event_category;
+		show City;
+		show Venue_details;
+		show Timezone;
+		show Agenda_URL;
+		show Priority;
+		if(input.Events_or_Webinars == "Webinars")
+		{
+			show Display_pages;
+			show Webinar_Duration;
+			hide Venue_details;
+			show Speakers;
+			show Dates_list;
+			hide City;
+		}
+		else if(input.Events_or_Webinars == "Events")
+		{
+			hide Display_pages;
+			hide Webinar_Duration;
+			show Venue_details;
+			hide Speakers;
+			hide Dates_list;
+			show City;
+		}
+		hide website_listing_message;
+		input.website_check = "no";
+		//
+		input.request_type_notes = "";
+		hide request_type_notes;
+		//
+		//
+		if(Events_or_Webinars == "Webinars")
+		{
+			getCountryDetails = Countries[Country == "India"];
+			input.Country = getCountryDetails.ID;
+			input.Region = "All region";
+			hide Country;
+			hide Region;
+		}
+		else
+		{
+			show Country;
+			show Region;
+		}
+	}
+	else if(landing_page == "" || landing_page == null)
+	{
+		input.Title = "";
+		input.Event_Name = "";
+		input.About_Event = "";
+		input.Notify_Team = null;
+		input.All_Solutions = null;
+		input.Products_solution = null;
+		input.From_Date = null;
+		input.To_Date = null;
+		input.Description = "";
+		input.Timezone = null;
+		input.Country = null;
+		input.Event_category = null;
+		input.Region = null;
+		input.Request_Type = null;
+		input.Document_link = "";
+		input.Venue_details = "";
+		input.Event_Webinar_URL = "";
+		input.Agenda_URL = "";
+		input.City = "";
+		input.Event_thumbnail_image = "";
+		input.Event_Logo_Link = "";
+		input.Content_Docs = "";
+		input.Content_approval_ID = "";
+		input.Organizers_Emails = null;
+		input.Event_Webinar_contact_details = "";
+		input.Keywords = "";
+		input.one_on_one_meeting = "";
+		input.Agenda = "";
+		input.Download_resources = "";
+		input.Mailer_request = "";
+		input.ID_card_print = "";
+		input.Webinar_Duration = "";
+		input.Display_pages = "";
+		input.On_demand_video_URL1 = "";
+		input.CRM_auto_push = "";
+		input.product_name = "";
+		input.leadsource = "";
+		input.type = "";
+		input.Platforms = "";
+		input.Booth_number = "";
+		input.Booth_Size = "";
+		input.Booth_Structure = "";
+		input.Event_Floor_Plan = "";
+		input.Related_Event_Campaign_if_any = "";
+		input.Accommodation = "";
+		input.Dress_Code = "";
+		input.Leads = "";
+		input.Onsite_Contact_Details = "";
+		input.People_Traveling = "";
+		input.Freebies_and_Quantity = "";
+		input.Press_Release_for_the_event = "";
+		input.Signed_Contract = "";
+		input.Speakers.clear();
+		input.Dates_list.clear();
+		input.Priority = "Low";
+		// ************** 	
+		hide Title;
+		hide Event_Name;
+		hide About_Event;
+		hide Notify_Team;
+		hide From_Date;
+		hide To_Date;
+		hide Description;
+		hide Timezone;
+		hide Country;
+		hide Event_category;
+		hide Region;
+		hide Request_Type;
+		hide Document_link;
+		hide Content_Docs;
+		hide Has_a_content_been_reviewed_approved;
+		hide Content_approval_ID;
+		hide Organizers_Emails;
+		hide Event_Webinar_contact_details;
+		hide Keywords;
+		hide one_on_one_meeting;
+		hide Agenda;
+		hide ID_card_print;
+		hide Download_resources;
+		hide Mailer_request;
+		hide Organizer_fields;
+		hide Event_Webinar_URL;
+		hide Agenda_URL;
+		hide City;
+		hide Event_thumbnail_image;
+		hide Event_Logo_Link;
+		hide Venue_details;
+		hide Design_fields;
+		hide Social;
+		hide CRM;
+		hide Speakers;
+		hide Dates_list;
+		hide Events_more_details;
+		hide Priority;
+		hide link_me_content_review;
+		hide content_approval_status;
+		hide Thumbnail_Link;
+		hide Select_your_option;
+		hide Display_pages;
+		hide Webinar_Duration;
+		hide All_Solutions;
+		hide Products_solution;
+		hide Approval_Status;
+		hide website_listing_message;
+		input.website_check = "no";
+		//
+		input.request_type_notes = "";
+		hide request_type_notes;
+		hide mailer_message;
+	}
+}
+
+
+// SCRIPT 2
+
+// ****************** Online / offline events handling ****************** //
+if(Events_or_Webinars != "" || Events_or_Webinars != null || landing_page != "" || landing_page != null)
+{
+	if(Events_or_Webinars != "" || Events_or_Webinars != null)
+	{
+		if(Event_category == "Virtual events" || Event_category == "Podcast" || Events_or_Webinars == "Webinars")
+		{
+			getCountryDetails = Countries[Country == "Online"];
+			input.Region = "All region";
+			input.Country = getCountryDetails.ID;
+			input.Venue_details = "Online";
+			hide Region;
+			hide Country;
+			hide Venue_details;
+			hide City;
+			hide Timezone;
+			if(input.Event_category == "Podcast")
+			{
+				input.From_Date = today;
+				input.To_Date = today;
+				hide From_Date;
+				hide To_Date;
+				hide Agenda_URL;
+			}
+			if(Events_or_Webinars == "Webinars")
+			{
+				show Timezone;
+				if(Event_category == "On-demand webinar")
+				{
+					show On_demand_video_URL1;
+				}
+				else
+				{
+					hide On_demand_video_URL1;
+				}
+			}
+		}
+		else
+		{
+			// **** show fields for ofline events ****
+			show From_Date;
+			show To_Date;
+			show Country;
+			show Venue_details;
+			show City;
+			show Agenda_URL;
+			show Region;
+			show Timezone;
+			if(landing_page == "Yes")
+			{
+				hide Agenda_URL;
+			}
+		}
+	}
+}
+
+
+// >>>>>>>select your option  444444
+
+// ----->SCRIPT 1
+
+notes_for_dd_type = "<span style=\"color: rgb(0, 153, 0);\">This request will complete by design and web development team.</span>";
+notes_for_wd_type = "<span style=\"color: rgb(0, 153, 0);\">This request will complete by web development team.</span>";
+notes_for_sl_type = "<span style=\"color: rgb(0, 153, 0);\">This request will complete by Social team.</span>";
+getCountryDetails = Countries[Country == "Online"];
+if(Events_or_Webinars != "" || Events_or_Webinars != null)
+{
+	websiteCheck = input.Select_your_option.contains("Add to website");
+	socialCheck = input.Select_your_option.contains("Add to social");
+	idCardCheck = input.Select_your_option.contains("ID Card");
+	mailerCheck = input.Select_your_option.contains("HTML mailers");
+	bannerCheck = input.Select_your_option.contains("Home page banner");
+	//
+	if(landing_page == "Yes")
+	{
+		input.Request_Type = "Design and Web Development";
+		input.request_type_notes = notes_for_dd_type;
+		show request_type_notes;
+	}
+	else if(landing_page == "No")
+	{
+		input.request_type_notes = notes_for_wd_type;
+		show request_type_notes;
+		if(socialCheck && !websiteCheck && !idCardCheck && !mailerCheck && !bannerCheck)
+		{
+			input.Request_Type = "Social listing";
+			input.request_type_notes = notes_for_sl_type;
+		}
+		else if(websiteCheck && !socialCheck && !idCardCheck && !mailerCheck && !bannerCheck)
+		{
+			input.Request_Type = "Web Development";
+		}
+		else if(websiteCheck && socialCheck && !idCardCheck && !mailerCheck && !bannerCheck)
+		{
+			input.Request_Type = "Web Development";
+		}
+		else if(bannerCheck)
+		{
+			input.Request_Type = "Design and Web Development";
+			input.request_type_notes = notes_for_dd_type;
+		}
+		else if(websiteCheck || idCardCheck || mailerCheck)
+		{
+			input.Request_Type = "Web Development";
+		}
+		else if(!socialCheck && !websiteCheck && !idCardCheck && !mailerCheck && !bannerCheck)
+		{
+			input.Request_Type = "";
+		}
+	}
+	else
+	{
+		input.Request_Type = "";
+	}
+	// ************************************************************************************ // 
+	// ************************************************************************************ // 
+	//
+	if(landing_page == "No" && socialCheck)
+	{
+		show Document_link;
+		show Content_Docs;
+		show Has_a_content_been_reviewed_approved;
+		if(Has_a_content_been_reviewed_approved == "Yes")
+		{
+			show Content_approval_ID;
+			show content_approval_status;
+			show link_me_content_review;
+		}
+		else
+		{
+			hide Content_approval_ID;
+			hide content_approval_status;
+			hide link_me_content_review;
+		}
+	}
+	else if(landing_page == "No" && !socialCheck)
+	{
+		hide Has_a_content_been_reviewed_approved;
+		hide Content_approval_ID;
+		input.Has_a_content_been_reviewed_approved = "No";
+		input.Content_approval_ID = "";
+		hide Document_link;
+		hide Content_Docs;
+		hide content_approval_status;
+		hide link_me_content_review;
+	}
+	//
+	// ************************************************************************************ // 
+	//
+	if(landing_page == "No" && socialCheck && !websiteCheck && !idCardCheck && !mailerCheck)
+	{
+		hide Event_Webinar_URL;
+		hide Agenda_URL;
+		hide Venue_details;
+		hide Timezone;
+		hide City;
+	}
+	else if(landing_page == "No" && !socialCheck)
+	{
+		show Event_Webinar_URL;
+		show Agenda_URL;
+		show Event_category;
+		show Venue_details;
+		show Timezone;
+		show City;
+	}
+	if(landing_page == "No" && websiteCheck)
+	{
+		show Venue_details;
+		show Event_Webinar_URL;
+	}
+	//
+	// ************************************************************************************ // 
+	if(mailerCheck)
+	{
+		show Mailer_request;
+	}
+	else
+	{
+		hide Mailer_request;
+	}
+	// ************************************************************************************ // 
+	if(socialCheck)
+	{
+		show Social_Media;
+		show Platforms;
+		show Event_registration_link;
+		show Time_of_Event;
+		show Creatives_to_Upload;
+		show Timezone1;
+	}
+	else
+	{
+		hide Social_Media;
+		hide Platforms;
+		hide Event_registration_link;
+		hide Time_of_Event;
+		hide Creatives_to_Upload;
+		hide Timezone1;
+	}
+	// ************************************************************************************ // 
+	if(websiteCheck)
+	{
+		input.website_check = "yes";
+	}
+	else
+	{
+		input.website_check = "no";
+	}
+	// ************************************************************************************ // 
+	if(bannerCheck)
+	{
+		show Where_to_banner;
+	}
+	else
+	{
+		hide Where_to_banner;
+	}
+	//
+	//
+	if(input.Events_or_Webinars == "Webinars")
+	{
+		input.Country = getCountryDetails.ID;
+		input.Region = "All region";
+		input.Venue_details = "Online";
+		hide Country;
+		hide Region;
+		hide Venue_details;
+	}
+	else if(input.Events_or_Webinars == "Events")
+	{
+		show Venue_details;
+	}
+	//////
+	//////
+	// ****** Remove unwanted fields for ( idCardCheck and mailerCheck ) ****** //
+	if(landing_page == "No")
+	{
+		if((idCardCheck && !websiteCheck && !socialCheck && !bannerCheck) || (mailerCheck && !websiteCheck && !socialCheck && !bannerCheck))
+		{
+			getSolution = ME_Solutions[Solution == "ManageEngine"];
+			getSolutionId = getSolution.ID;
+			input.All_Solutions = getSolutionId;
+			input.About_Event = "-";
+			input.Venue_details = "-";
+			input.Event_Webinar_URL = "-";
+			input.Agenda_URL = "-";
+			input.Region = "All region";
+			hide All_Solutions;
+			hide About_Event;
+			hide Venue_details;
+			hide Event_Webinar_URL;
+			hide Agenda_URL;
+			hide Region;
+			hide Timezone;
+			hide City;
+		}
+		else
+		{
+			show All_Solutions;
+			show About_Event;
+			show Venue_details;
+			show Event_Webinar_URL;
+			show Agenda_URL;
+			show Region;
+			show Timezone;
+			show City;
+		}
+	}
+	else
+	{
+		show All_Solutions;
+		show About_Event;
+		show Venue_details;
+		show Event_Webinar_URL;
+		// 		show Agenda_URL;
+		show Region;
+		show Timezone;
+		show City;
+	}
+	//////
+	//////
+	//if(input.Event_category != null || input.Event_category != "" && input.Events_or_Webinars == "Events")
+	if(input.Event_category != null || input.Event_category != "")
+	{
+		if(Event_category == "Virtual events" || Event_category == "Podcast" || Events_or_Webinars == "Webinars")
+		{
+			getCountryDetails = Countries[Country == "Online"];
+			input.Region = "All region";
+			input.Country = getCountryDetails.ID;
+			input.Venue_details = "Online";
+			hide Region;
+			hide Country;
+			hide Venue_details;
+			hide City;
+			hide Timezone;
+			if(input.Event_category == "Podcast")
+			{
+				input.From_Date = today;
+				input.To_Date = today;
+				hide From_Date;
+				hide To_Date;
+				hide Agenda_URL;
+			}
+			if(Events_or_Webinars == "Webinars")
+			{
+				show Timezone;
+				if(Event_category == "On-demand webinar")
+				{
+					show On_demand_video_URL1;
+				}
+				else
+				{
+					hide On_demand_video_URL1;
+				}
+			}
+		}
+		else
+		{
+			// show fields for ofline events
+			show From_Date;
+			show To_Date;
+			show Country;
+			show Venue_details;
+			show City;
+			show Agenda_URL;
+			show Region;
+			show Timezone;
+			if(landing_page == "Yes")
+			{
+				hide Agenda_URL;
+			}
+		}
+	}
+}
+
+
+// ----->SCRIPT 2
+
+// **************************************************************************************
+// **************************** Home page banner integration ****************************
+// **************************************************************************************
+bannerCheck = input.Select_your_option.contains("Home page banner");
+//
+if(bannerCheck)
+{
+	input.home_page_banner_check_validation1 = input.home_page_banner_check_validation1 + 1;
+}
+else
+{
+	input.home_page_banner_check_validation1 = 0;
+	input.home_page_banner_content = "<br>";
+	hide home_page_banner_content;
+}
+if(bannerCheck && input.home_page_banner_check_validation1 == 1)
+{
+	currentBannerList = thisapp.homepagebanner.getCurrentCount();
+	counter = 0;
+	for each  banner in currentBannerList
+	{
+		counter = counter + 1;
+	}
+	options = Map();
+	options.put("countEnable","true");
+	table = thisapp.homePageBanner.getList();
+	table = "<h3> home page banner list </h3> " + table;
+	home_page_content = table;
+	if(counter >= 5)
+	{
+		alert "More than 5 banner , you request will be queued";
+	}
+	// request que
+	queReport = Que_Request[CMD_Request_Status != "Added"];
+	que_response_list = List();
+	que_table_cols = List();
+	que_table_cols.add("Request_Title");
+	que_table_cols.add("Request_Type");
+	que_table_cols.add("ID");
+	for each  QueReq in queReport
+	{
+		letQueRec = Map();
+		letQueRec.put("Request_Title",QueReq.Request_Title);
+		letQueRec.put("Request_Type",QueReq.Request_Type);
+		letQueRec.put("ID",QueReq.ID);
+		que_response_list.add(letQueRec);
+	}
+	if(queReport.count(ID) != 0)
+	{
+		queTable = thisapp.table.makeTable(que_response_list,que_table_cols,options);
+		queTable = "<h3> Queued home page request list </h3>" + queTable;
+	}
+	else
+	{
+		queTable = "<h3> Queued home page request list </h3> <br> No data ";
+	}
+	//queTable = "";
+	input.home_page_banner_content = table + queTable;
+	show home_page_banner_content;
+}
+
+
+// >>>>>>>>Events or webinars  55555
+
+// ********************* Clear Fields based on selection ************************
+constCategoryList = thisapp.eventsWebinar.category_list();
+constVar = thisapp.eventsWebinar.constantVariable();
+if(input.Events_or_Webinars == "Events")
+{
+	show landing_page;
+	hide On_demand_video_URL1;
+	for each  value in constCategoryList
+	{
+		if(value.get('type') == 'event')
+		{
+			input.Event_category:ui.add(value.get('option'));
+		}
+	}
+	if(landing_page == "No" || landing_page == "Yes")
+	{
+		show Venue_details;
+		hide Webinar_Duration;
+		hide Display_pages;
+		show City;
+		show Timezone;
+		// 		input.Country = null;
+		// 		input.Region = "";
+		show Country;
+		show Region;
+		if(landing_page == "Yes")
+		{
+			show Events_more_details;
+			show Organizer_fields;
+			show Speakers;
+			show Dates_list;
+			//
+			for each  value in constVar
+			{
+				if(value.get('landing_page') == 'yes')
+				{
+					if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+					{
+						// *** do something ***
+					}
+					else
+					{
+						input.Select_your_option:ui.add(value.get('option'));
+					}
+				}
+			}
+		}
+		else
+		{
+			hide Speakers;
+			hide Dates_list;
+			//
+			for each  value in constVar
+			{
+				if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+				{
+					// *** do something ***
+				}
+				else
+				{
+					input.Select_your_option:ui.add(value.get('option'));
+				}
+			}
+		}
+	}
+}
+else if(input.Events_or_Webinars == "Webinars")
+{
+	show landing_page;
+	for each  value in constCategoryList
+	{
+		if(value.get('type') == 'webinar')
+		{
+			// 			info value.get('option');
+			input.Event_category:ui.add(value.get('option'));
+		}
+	}
+	hide Events_more_details;
+	hide Organizer_fields;
+	if(landing_page == "No" || landing_page == "Yes")
+	{
+		input.Venue_details = "";
+		hide Venue_details;
+		show Speakers;
+		show Dates_list;
+		hide City;
+		show Timezone;
+		getCountryDetails = Countries[Country == "Online"];
+		input.Country = getCountryDetails.ID;
+		input.Region = "All region";
+		hide Country;
+		hide Region;
+		if(landing_page == "Yes")
+		{
+			for each  value in constVar
+			{
+				if(value.get('landing_page') == 'yes')
+				{
+					if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+					{
+						// *** do something ***
+					}
+					else
+					{
+						input.Select_your_option:ui.add(value.get('option'));
+					}
+				}
+				else if(landing_page == "No")
+				{
+					for each  value in constVar
+					{
+						if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+						{
+							// *** do something ***
+						}
+						else
+						{
+							input.Select_your_option:ui.add(value.get('option'));
+						}
+					}
+				}
+			}
+		}
+	}
+}
+else if(input.Events_or_Webinars == null || input.Events_or_Webinars == "")
+{
+	hide landing_page;
+	hide Title;
+	hide Event_Name;
+	hide Notify_Team;
+	hide All_Solutions;
+	hide Products_solution;
+	hide From_Date;
+	hide To_Date;
+	hide Description;
+	hide Timezone;
+	hide Country;
+	hide Event_category;
+	hide Region;
+	hide Request_Type;
+	hide work_type;
+	hide Document_link;
+	hide Content_Docs;
+	hide Has_a_content_been_reviewed_approved;
+	hide Content_approval_ID;
+	hide Organizers_Emails;
+	hide Event_Webinar_contact_details;
+	hide Keywords;
+	hide one_on_one_meeting;
+	hide Agenda;
+	hide ID_card_print;
+	hide Download_resources;
+	hide Mailer_request;
+	hide Organizer_fields;
+	hide CRM;
+	hide Social;
+	hide Select_where_you_want;
+	hide Event_Webinar_URL;
+	hide Social;
+	hide Agenda_URL;
+	hide City;
+	hide Event_thumbnail_image;
+	hide Event_Logo_Link;
+	hide Venue_details;
+	hide Design_fields;
+	hide Social;
+	hide CRM;
+	hide Speakers;
+	hide Dates_list;
+	hide Events_more_details;
+	hide link_me_content_review;
+	hide content_approval_status;
+	hide Approval_Status;
+	hide Select_your_option;
+	hide Priority;
+	hide Platforms;
+	hide website_listing_message;
+	// ********************
+	input.Select_where_you_want = "";
+	input.Title = "";
+	input.Event_Name = "";
+	input.Notify_Team = null;
+	input.All_Solutions = null;
+	input.Products_solution = null;
+	input.From_Date = null;
+	input.To_Date = null;
+	input.Description = "";
+	input.Timezone = null;
+	input.Country = null;
+	input.Event_category = null;
+	input.Region = null;
+	input.Request_Type = null;
+	work_type.deselectall();
+	input.Document_link = "";
+	input.Venue_details = "";
+	input.Event_Webinar_URL = "";
+	input.Agenda_URL = "";
+	input.City = "";
+	input.Event_thumbnail_image = "";
+	input.Event_Logo_Link = "";
+	input.Content_Docs = "";
+	input.Content_approval_ID = "";
+	input.Organizers_Emails = null;
+	input.Event_Webinar_contact_details = "";
+	input.Keywords = "";
+	input.one_on_one_meeting = "";
+	input.Agenda = "";
+	input.Download_resources = "";
+	input.Mailer_request = "";
+	input.ID_card_print = "";
+	input.Webinar_Duration = "";
+	input.Display_pages = "";
+	input.On_demand_video_URL1 = "";
+	input.CRM_auto_push = "";
+	input.product_name = "";
+	input.leadsource = "";
+	input.type = "";
+	input.Platforms = "";
+	input.Booth_number = "";
+	input.Booth_Size = "";
+	input.Booth_Structure = "";
+	input.Event_Floor_Plan = "";
+	input.Related_Event_Campaign_if_any = "";
+	input.Accommodation = "";
+	input.Dress_Code = "";
+	input.Leads = "";
+	input.Onsite_Contact_Details = "";
+	input.People_Traveling = "";
+	input.Freebies_and_Quantity = "";
+	input.Press_Release_for_the_event = "";
+	input.Signed_Contract = "";
+	input.Speakers.clear();
+	input.Dates_list.clear();
+	input.landing_page = "";
+	input.Platforms = "";
+}
+
+
+// >>>>>>>>>> Category handling  66666
+
+// ---->SCRIPT 1
+
+store_slect_your_option = "";
+if(input.form_add_edit_mode == "exist")
+{
+	store_slect_your_option = input.Select_your_option;
+}
+if(input.Event_category == "" || input.Event_category == null)
+{
+	input.Speakers.clear();
+	input.Dates_list.clear();
+	hide Speakers;
+	hide Dates_list;
+	input.event_mode = "";
+}
+else
+{
+	show Speakers;
+	show Dates_list;
+	// 	***** update event mode (offline / online) ***** //
+	constCategoryList = thisapp.eventsWebinar.category_list();
+	for each  value in constCategoryList
+	{
+		if(value.get('option') == Event_category)
+		{
+			input.event_mode = value.get('event_mode');
+		}
+	}
+	// 	***** enable thumbnail image ***** //
+	if(Event_category == "User conference")
+	{
+		show Thumbnail_Link;
+	}
+	else
+	{
+		hide Thumbnail_Link;
+	}
+	// 	***** Enable event logo for industry events ***** //\if(Event_category == "User conference")
+	if(Event_category == "Industry events" || Event_category == "Virtual events")
+	{
+		show Event_thumbnail_image;
+		show Event_Logo_Link;
+	}
+	else
+	{
+		hide Event_thumbnail_image;
+		hide Event_Logo_Link;
+	}
+}
+//
+//
+// 	***** Home page banners handling based on event category(user conference) ***** //
+constVar = thisapp.eventsWebinar.constantVariable();
+if(landing_page == "Yes")
+{
+	if(input.Event_category == "User conference")
+	{
+		for each  value in constVar
+		{
+			if(value.get('landing_page') == 'yes')
+			{
+				// if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+				if(value.get('value') == 'idCard')
+				{
+					// *** do something *** //
+				}
+				else
+				{
+					input.Select_your_option:ui.add(value.get('option'));
+				}
+			}
+		}
+	}
+	else
+	{
+		for each  value in constVar
+		{
+			if(value.get('landing_page') == 'yes')
+			{
+				// if((value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars") || value.get('value') == 'homeBanner')
+				if(value.get('value') == 'idCard' || value.get('value') == 'homeBanner')
+				{
+					// *** do something ***
+				}
+				else
+				{
+					input.Select_your_option:ui.add(value.get('option'));
+				}
+			}
+		}
+	}
+}
+else if(landing_page == "No")
+{
+	if(input.Event_category == "User conference")
+	{
+		for each  value in constVar
+		{
+			// if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+			if(value.get('value') == 'idCard')
+			{
+				// *** do something ***
+			}
+			else
+			{
+				input.Select_your_option:ui.add(value.get('option'));
+			}
+		}
+	}
+	else
+	{
+		for each  value in constVar
+		{
+			// if((value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars") || value.get('value') == 'homeBanner')
+			if(value.get('value') == 'idCard' || value.get('value') == 'homeBanner')
+			{
+				// *** do something ***
+			}
+			else
+			{
+				input.Select_your_option:ui.add(value.get('option'));
+			}
+		}
+	}
+}
+input.Select_your_option = store_slect_your_option;
+//
+//
+
+
+// ----->SCRIPT 2
+
+// **************************************************************************************
+// **************************** Online and Offline event handling ***********************
+// **************************************************************************************
+if(input.Event_category == "" || input.Event_category == null)
+{
+	// Do nothing 
+}
+else
+{
+	selected_region = "";
+	if(input.form_add_edit_mode == "exist")
+	{
+		selected_region = input.Region;
+	}
+	if(Event_category == "Virtual events" || Event_category == "Podcast" || Events_or_Webinars == "Webinars")
+	{
+		input.Region:ui.add("All region");
+		input.Region = "All region";
+		getCountryDetails = Countries[Country == "Online"];
+		input.Country = getCountryDetails.ID;
+		input.Venue_details = "Online";
+		hide Region;
+		hide Country;
+		hide Venue_details;
+		hide City;
+		hide Timezone;
+		if(input.Event_category == "Podcast")
+		{
+			input.From_Date = today;
+			input.To_Date = today;
+			hide From_Date;
+			hide To_Date;
+			hide Agenda_URL;
+		}
+		if(Events_or_Webinars == "Webinars")
+		{
+			show Timezone;
+			if(Event_category == "On-demand webinar")
+			{
+				show On_demand_video_URL1;
+			}
+			else
+			{
+				hide On_demand_video_URL1;
+			}
+		}
+	}
+	else
+	{
+		input.Region:ui.add("Asia Pacific");
+		input.Region:ui.add("Europe Middle East Africa");
+		input.Region:ui.add("India South Asia");
+		input.Region:ui.add("Latin America");
+		input.Region:ui.add("North America");
+		// show fields for ofline events
+		show From_Date;
+		show To_Date;
+		show Country;
+		show Venue_details;
+		show City;
+		show Agenda_URL;
+		show Region;
+		show Timezone;
+		if(landing_page == "Yes")
+		{
+			hide Agenda_URL;
+		}
+	}
+	input.Region = selected_region;
+}
+//
+if(Events_or_Webinars == "" || Events_or_Webinars == null)
+{
+	hide From_Date;
+	hide To_Date;
+	hide Country;
+	hide Venue_details;
+	hide City;
+	hide Agenda_URL;
+	hide Region;
+	hide Timezone;
+	hide On_demand_video_URL1;
+}
+
+
+// >>>>>>>  Region handling  77777y
+
+// *** Handle on only edit option *** //
+selected_country = "";
+if(input.form_add_edit_mode == "exist")
+{
+	selected_country = input.Country;
+}
+//
+//
+getCountries = Countries[Region1 == input.Region];
+clear Country;
+for each  countryItem in getCountries
+{
+	input.Country:ui.add(countryItem.ID);
+}
+//
+//
+if(input.form_add_edit_mode == "exist")
+{
+	input.Country = selected_country;
+}
+//
+if(Region == "All region")
+{
+	getCountryDetails = Countries[Country == "Online"];
+	input.Country = getCountryDetails.ID;
+}
+
+//  >>>>>>> ME solution Handling  88888
+
+if(Events_or_Webinars != "" || Events_or_Webinars != null)
+{
+	getSolutionDetails = ME_Solutions[ID == input.All_Solutions];
+	if(getSolutionDetails.Solution == "ManageEngine")
+	{
+		hide Products_solution;
+		input.calendar_color_code = "#8cbf40";
+	}
+	else if(input.All_Solutions != null)
+	{
+		show Products_solution;
+		input.calendar_color_code = "#ffd700";
+	}
+	//
+	//
+	if(getSolutionDetails.Solution == "" || getSolutionDetails.Solution == null)
+	{
+		hide Products_solution;
+		input.calendar_color_code = "";
+	}
+}
+
+
+//  >>>>>  Verify-content-approve-id 9999
+
+//
+if(input.Content_approval_ID != "" && input.Content_approval_ID != null)
+{
+	status = me_review_app.fetchDocumentStatus(input.Content_approval_ID);
+	if(status == "invalid")
+	{
+		input.content_approval_status = "<p style=\"color: Crimson; \">Invalid Approval ID</p>";
+	}
+	if(status == "not_approved")
+	{
+		input.content_approval_status = "<p style=\"color: Crimson; \">Your content not approved, please contact review team.</p>";
+	}
+	if(status == "approved")
+	{
+		approvalDate = me_review_app.getApprovalDate(input.Content_approval_ID);
+		input.content_approval_status = "<p style=\"color: green; \">Your Content is approved on " + approvalDate + ", you can submit the creative request.</p>";
+	}
+}
+else
+{
+	input.content_approval_status = "<br>";
+}
+
+
+// >>>>>>>   on change ME review document 10 10 10 10
+
+if(input.Choose_your_document_from_ME_Review_app != null)
+{
+	getDetails = me_review_app.getRowDetailsById(input.Choose_your_document_from_ME_Review_app);
+	input.Document_link = getDetails.get("document_url");
+	input.Review_app_document_title = getDetails.get("title");
+	disable Document_link;
+}
+
+
+
+// >>>>>>>> Date end string
+
+input.End_String = input.To_Date.toString("yyyy-MM-dd") + "T" + input.To_Date.toString("HH:mm:ss") + "Z";
+if(input.From_Date != null && input.To_Date != null)
+{
+	if(input.From_Date > input.To_Date)
+	{
+		alert "To date is lower than From Date";
+	}
+}
+
+// >>>>> On priority change ..
+
+if(input.Priority == "High" || input.Priority == "Urgent")
+{
+	show Reason_for_Urgent_High_priority;
+}
+else
+{
+	hide Reason_for_Urgent_High_priority;
+}
+
+//  >>>>> Date start string
+
+input.Start_String = input.From_Date.toString("yyyy-MM-dd") + "T" + input.From_Date.toString("HH:mm:ss") + "Z";
+if(input.From_Date != null && input.To_Date != null)
+{
+	if(input.From_Date > input.To_Date)
+	{
+		alert "To date is lower than From Date";
+	}
+}
+
+

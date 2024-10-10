@@ -1,0 +1,172 @@
+//>>>>>>>>Validation before submit
+
+
+validateError = 0;
+socialCheck = input.Select_your_option.contains("Add to social");
+websiteCheck = input.Select_your_option.contains("Add to website");
+idCardCheck = input.Select_your_option.contains("ID Card");
+mailerCheck = input.Select_your_option.contains("HTML mailers");
+if(socialCheck && !websiteCheck && !idCardCheck && !mailerCheck)
+{
+	// Do nothing
+}
+else if(input.Request_Type == "" || input.Request_Type == null)
+{
+	alert(Request_Type,"This field is mandatory.");
+	validateError = validateError + 1;
+}
+//  **********************************************************************************************************************************************//
+if(input.From_Date != null && input.To_Date != null)
+{
+	if(input.From_Date > input.To_Date)
+	{
+		alert(To_Date,"To date is lower than From Date");
+		validateError = validateError + 1;
+	}
+}
+//  **********************************************************************************************************************************************//
+getSolutionDetails = ME_Solutions[ID == input.All_Solutions];
+if(getSolutionDetails.Solution != "ManageEngine" && input.Products_solution.size() == 0)
+{
+	alert(Products_solution,"This field is mandatory. Select a value.");
+	validateError = validateError + 1;
+}
+//************************************************************************************************************************************************//
+if(landing_page == "No")
+{
+	if(input.Select_your_option.size() == 0)
+	{
+		alert(Select_your_option,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+}
+//*************************************************************************************************************************************************//
+if(input.Region == "" || input.Region == null)
+{
+	alert(Region,"This field is mandatory.");
+	validateError = validateError + 1;
+}
+if(input.Event_category == "" || input.Event_category == null)
+{
+	alert(Event_category,"This field is mandatory.");
+	validateError = validateError + 1;
+}
+if(input.Events_or_Webinars == "Events")
+{
+	if(landing_page == "No" && Select_your_option == "Add to website")
+	{
+		if(input.Event_Webinar_URL == "" || input.Event_Webinar_URL == null)
+		{
+			alert(Event_Webinar_URL,"This field is mandatory.");
+			validateError = validateError + 1;
+		}
+	}
+	if(socialCheck && !websiteCheck && !idCardCheck && !mailerCheck)
+	{
+		// Do nothing
+	}
+	else if(input.Venue_details == "" || input.Venue_details == null)
+	{
+		alert(Venue_details,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+}
+//*************************************************************************************************************************************************//
+if(input.Event_category == "On-demand webinar")
+{
+	if(input.On_demand_video_URL1 == "" || input.On_demand_video_URL1 == null)
+	{
+		alert(On_demand_video_URL1,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+}
+//
+// ****************************
+//  **************  Creative design form validation  ************** //
+// ****************************
+if(input.Has_a_content_been_reviewed_approved == null)
+{
+	alert(Has_a_content_been_reviewed_approved,"This field is mandatory.");
+	validateError = validateError + 1;
+}
+else if(input.Has_a_content_been_reviewed_approved == "Yes" || (input.Has_a_content_been_reviewed_approved == "Yes" && socialCheck))
+{
+	// 	if(input.Content_approval_ID == "" || input.Content_approval_ID == null)
+	// 	{
+	// 		alert(Content_approval_ID,"This field is mandatory.");
+	// 		validateError = validateError + 1;
+	// 	}
+	// 	else
+	// 	{
+	// 		review_document_status = me_review_app.fetchDocumentStatus(input.Content_approval_ID);
+	// 		if(review_document_status == "invalid")
+	// 		{
+	// 			alert(Content_approval_ID,"Invalid Approval ID");
+	// 			validateError = validateError + 1;
+	// 		}
+	// 		if(review_document_status == "not_approved")
+	// 		{
+	// 			alert(Content_approval_ID,"our content not approved, please contact review team.");
+	// 			validateError = validateError + 1;
+	// 		}
+	// 	}
+	if(input.Choose_your_document_from_ME_Review_app == null)
+	{
+		alert(Choose_your_document_from_ME_Review_app,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+}
+if(socialCheck)
+{
+	if(input.Event_Name == "" || input.Event_Name == null)
+	{
+		alert(Event_Name,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+	if(input.Event_registration_link == "" || input.Event_registration_link == null)
+	{
+		alert(Event_registration_link,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+	if(input.Time_of_Event == null)
+	{
+		alert(Time_of_Event,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+	if(input.Timezone1 == null)
+	{
+		alert(Timezone1,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+	if(input.Platforms.size() == 0)
+	{
+		alert(Platforms,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+	if(input.Creatives_to_Upload == "" || input.Creatives_to_Upload == null)
+	{
+		alert(Creatives_to_Upload,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+}
+if(input.landing_page == "Yes" || websiteCheck || socialCheck)
+{
+	if(input.About_Event == "" || input.About_Event == null)
+	{
+		alert(About_Event,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+}
+if(input.Priority == "High" || input.Priority == "Urgent")
+{
+	if(Reason_for_Urgent_High_priority == "" || Reason_for_Urgent_High_priority == null)
+	{
+		alert(Reason_for_Urgent_High_priority,"This field is mandatory.");
+		validateError = validateError + 1;
+	}
+}
+//  ************** FINAL VALIDATION ************** //
+if(validateError != 0)
+{
+	cancel submit;
+}

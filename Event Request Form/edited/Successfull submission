@@ -1,0 +1,528 @@
+/////>>>>>>>>>>>>> cmd 2.0 update integration
+
+// ----->SCRIPT 1
+
+if(input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	if(input.update_check_on_edit == "yes")
+	{
+		// ********* Speaker List add to the CMD creative description ********* //
+		SpeakerDetails = "";
+		SpeakerIndex = 1;
+		for each  i_list in Speakers
+		{
+			speakerTitle = "Speaker - " + SpeakerIndex + "\n";
+			SpeakerIndex = SpeakerIndex + 1;
+			speakerName = "Speaker Name: " + i_list.Speaker_Name + "\n";
+			speakerImage = "Speaker Image URL: " + i_list.Speaker_Image_Url + "\n";
+			speakerImageFile = "Speaker Image File: " + i_list.Speaker_Image_Upload + "\n";
+			speakerDesignation = "Speaker Designation: " + i_list.Speaker_Designation + "\n\n";
+			SpeakerDetails = SpeakerDetails + speakerTitle + speakerName + speakerImage + speakerImageFile + speakerDesignation;
+		}
+		// ********* Date List add to the CMD creative description ********* //
+		DateListDetails = "";
+		DateListIndex = 1;
+		for each  j_list in Dates_list
+		{
+			webinarDateListTitle = "Date List - " + DateListIndex + "\n";
+			DateListIndex = DateListIndex + 1;
+			getTimezoneName = Timezone[ID == j_list.Time_Zone];
+			webinarDateListDate = "Date: " + j_list.Date_field1 + "\n";
+			webinarDateListTime = "Time: " + j_list.Time.getSuffix(" ") + "\n";
+			webinarDateListTimezone = "Timezone: " + getTimezoneName.Timezone_Value + "\n";
+			webinarDateListWebinarURL = "Webinar URL: " + j_list.Events_Webinar_URL + "\n\n";
+			DateListDetails = DateListDetails + webinarDateListDate + webinarDateListTime + webinarDateListTimezone + webinarDateListWebinarURL;
+		}
+		//
+		getCountryDetails = Countries[ID == input.Country];
+		descrptn = "";
+		descrptn = descrptn + "Event Name: " + input.Event_Name + "\n";
+		descrptn = descrptn + "From Date: " + input.From_Date + "\n";
+		descrptn = descrptn + "To Date: " + input.To_Date + "\n";
+		descrptn = descrptn + "Country: " + getCountryDetails.Country + "\n";
+		descrptn = descrptn + "Category: " + input.Event_category + "\n";
+		descrptn = descrptn + "Venue Details: " + input.Venue_details + "\n";
+		if(landing_page == "No" && Select_your_option == "Add to website")
+		{
+			descrptn = descrptn + "Website url: " + input.Event_Webinar_URL + "\n\n";
+		}
+		descrptn = descrptn + "Description: " + input.Description + "\n";
+		if(SpeakerDetails != "")
+		{
+			descrptn = descrptn + "\n Speaker Details: \n" + SpeakerDetails + "\n";
+		}
+		if(DateListDetails != "")
+		{
+			descrptn = descrptn + "\n Date List Details: \n" + DateListDetails + "\n";
+		}
+		//
+		//
+		editCreativeId = input.creative_form_id;
+		myList = editCreativeId.toList(", ");
+		for each  creative_id in myList
+		{
+			wRequestData = Map();
+			wRequestData.put("e","isjmasd89weklcgasd89q3r");
+			wRequestData.put("description",descrptn);
+			wRequestData.put("creativeId",creative_id);
+			wRequestData.put("mode","update");
+			cmd_creative_id_response = thisapp.eventsWebinar.cmd_2_insert_integration(wRequestData,"update");
+			if(cmd_creative_id_response == 1)
+			{
+				sendmail
+				[
+					from :"me-dashboard@manageengine.com"
+					to :"elango.j@zohocorp.com"
+					subject :"[Error] Event Form update"
+					message :"<table style=\"font-size :  14px;\" cellpadding=\"5\"><tbody><tr><th align=\"left\">Request for <br></th><td style=\"height: 46px;\"><br>" + input.Events_or_Webinars + " - &nbsp;<br></td></tr><tr><th align=\"left\">Request title <br></th><td>" + input.Title + "&nbsp; <br></td></tr><tr><th align=\"left\">Description <br></th><td>" + descrptn + "&nbsp; <br></td></tr><tr><th align=\"left\">Ticket ID <br></th><td>" + input.ID + "&nbsp; <br></td></tr><tr><th align=\"left\">Created By <br></th><td><a style=\"color: rgb(0, 0, 238);\" data-zeanchor=\"true\" target=\"_blank\" href=\"" + "mailto:" + input.ew_loginUser + "\"" + ">" + input.ew_loginUser + " </a> <br></td></tr></tbody></table><div><br></div>"
+				]
+			}
+		}
+	}
+}
+
+
+
+// ---> SCRIPT 2
+
+
+if(input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	// ******************* 1. [ Edited ] Send Email to Notify team *****************************
+	if(input.update_check_on_edit == "yes")
+	{
+		allEmailList = "";
+		recordMap = Map();
+		recordMap.put("mode","edited");
+		recordMap.put("ID",input.ID);
+		recordMap.put("Events_or_Webinars",input.Events_or_Webinars);
+		recordMap.put("Select_where_you_want",input.Select_where_you_want);
+		recordMap.put("Request_Type",input.Request_Type);
+		recordMap.put("Title",input.Title);
+		recordMap.put("Description",input.Description);
+		recordMap.put("Event_category",input.Event_category);
+		recordMap.put("Priority",input.Priority);
+		recordMap.put("ew_loginUser",input.ew_loginUser);
+		recordMap.put("Comments",input.Comments);
+		recordMap.put("Added_User",input.Added_User);
+		recordMap.put("Added_Time",input.Added_Time);
+		recordMap.put("Select_your_option",input.Select_your_option);
+		recordMap.put("landing_page",input.landing_page);
+		recordMap.put("Event_Name",input.Event_Name);
+		//
+		//
+		if(Notify_Team != null)
+		{
+			items = input.Notify_Team.toListString();
+			for each  i in items
+			{
+				newText = trim(i);
+				emailID = newText.toNumber();
+				getNotifyEmail = Team_Email[ID = emailID];
+				emailToSend = getNotifyEmail.Team_Email;
+				recordMap.put("emailToSend",emailToSend);
+				thisapp.eventsWebinar.requestCreatedMail(recordMap);
+				if(allEmailList == "")
+				{
+					allEmailList = emailToSend;
+				}
+				else
+				{
+					allEmailList = allEmailList + ", " + emailToSend;
+				}
+			}
+		}
+		// ************** 2. Send Email to ME social team for listing **************************** //
+		socialCheck = input.Select_your_option.contains("Add to social");
+		if(socialCheck)
+		{
+			recordMap.put("from_date",input.From_Date);
+			recordMap.put("to_date",input.To_Date);
+			recordMap.put("Time_of_Event",input.Time_of_Event);
+			recordMap.put("Platforms",input.Platforms);
+			recordMap.put("Event_registration_link",input.Event_registration_link);
+			recordMap.put("Timezone1",input.Timezone1);
+			recordMap.put("Creatives_to_Upload",input.Creatives_to_Upload);
+			// 		recordMap.put("emailToSend","elango.j+social@zohotest.com");
+			// 		thisapp.eventsWebinar.socialTeamMail(recordMap);
+			recordMap.put("emailToSend","me-cdev@zohocorp.com");
+			thisapp.eventsWebinar.socialTeamMail(recordMap);
+		}
+		// ************** 3. Send Email to ME-Development (notification) / To elango (check flow working for some days) **************************** //
+		// 	// **** Notify(elango.j+eventformEdited@zohotest.com) ****
+		// 	recordMap.put("emailToSend","elango.j+eventformEdited@zohotest.com");
+		// 	thisapp.eventsWebinar.requestCreatedMail(recordMap);
+		// // **** Notify(me-cdev@zohocorp.com) ****
+		if(allEmailList.contains("me-cdev@zohocorp.com"))
+		{
+			// do nothing
+		}
+		else
+		{
+			recordMap.put("emailToSend","me-cdev@zohocorp.com");
+			thisapp.eventsWebinar.requestCreatedMail(recordMap);
+		}
+	}
+}
+
+
+
+// >>>>>>>>..catalyst-update-integration
+
+// *************** INSERT FUNCTION ****************** //
+if(input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	if((Select_where_you_want = "Add to listing" && Approval_Status == "Approve" && catl_event_id == null) || (Select_where_you_want = "Add to listing" && Approval_Status == "Approve" && catl_event_id == ""))
+	{
+		getCountryName = Countries[ID == input.Country];
+		myMap = Map();
+		myMap.put("title",input.Title);
+		myMap.put("description",input.Description);
+		// myMap.put("place","creatorapi"); -- need to add in form
+		myMap.put("event_from",input.From_Date);
+		myMap.put("event_to",input.To_Date);
+		myMap.put("type",input.Event_category);
+		myMap.put("web_url",input.Event_Webinar_URL);
+		myMap.put("solution",input.All_Solutions);
+		myMap.put("products",input.Products_solution);
+		// myMap.put("document_link",); -- need to add in form
+		// 	myMap.put("country",input.Countries);
+		myMap.put("country",getCountryName.Country);
+		myMap.put("region",input.Region);
+		myMap.put("keywords",input.Keywords);
+		myMap.put("one_on_one_meeting",input.one_on_one_meeting);
+		myMap.put("agenda_url",input.Agenda);
+		myMap.put("venue_details",input.Venue_details);
+		myMap.put("approval_status",input.Approval_Status);
+		myMap.put("webinar_duration",input.Webinar_Duration);
+		myMap.put("timezone",input.Timezone);
+		myMap.put("agenda_url",input.Agenda_URL);
+		myMap.put("listing_status",1);
+		myMap.put("mode","add");
+		//
+		// myMap.put("agenda_status","creatorapi");
+		// myMap.put("speaker_status","creatorapi");
+		// myMap.put("address_status","creatorapi");
+		// myMap.put("address_url","creatorapi");
+		// 
+		// resp = postUrl("https://meevents-709834020.development.catalystserverless.com/server/me_events_function/performEventWebinar",myMap);
+		resp = postUrl("https://cdev.manageengine.com/server/me-events-api_function/performEventWebinar",myMap);
+		out = resp.toMap();
+		statusCode = out.get("statusCode");
+		event_id = out.get("event_id");
+		if(statusCode == "200")
+		{
+			input.catl_event_id = event_id;
+			// ********************************************
+			// **** INSERT SPEAKER LIST ****
+			// ********************************************
+			for each  i_list in Speakers
+			{
+				speakerMap = Map();
+				speakerMap.put("speaker_name",i_list.Speaker_Name);
+				speakerMap.put("speaker_image",i_list.Speaker_Image_Url);
+				speakerMap.put("speaker_designation",i_list.Speaker_Designation);
+				speakerMap.put("event_webinar_id",event_id);
+				speakerMap.put("mode","add");
+				//speakerResp = postUrl("https://meevents-709834020.development.catalystserverless.com/server/me_events_function/performEventSpeakers",speakerMap);
+				speakerResp = postUrl("https://cdev.manageengine.com/server/me-events-api_function/performEventSpeakers",speakerMap);
+				speakerOutput = speakerResp.toMap();
+				event_speaker_id_ = speakerOutput.get("speaker_id");
+				i_list.speaker_event_id=event_speaker_id_;
+			}
+			// ********************************************
+			// **** INSERT DATE LIST ****
+			// ********************************************
+			for each  j_list in Dates_list
+			{
+				getTimezoneName = Timezone[ID == j_list.Time_Zone];
+				dateListMap = Map();
+				dateListMap.put("event_list_date",j_list.Date_field1);
+				dateListMap.put("event_list_time",j_list.Time);
+				dateListMap.put("event_list_timezone",getTimezoneName.Timezone_Value);
+				dateListMap.put("event_list_web_url",j_list.Events_Webinar_URL);
+				dateListMap.put("event_webinar_id",event_id);
+				dateListMap.put("mode","add");
+				//speakerResp = postUrl("https://meevents-709834020.development.catalystserverless.com/server/me_events_function/performEventDatelist",dateListMap);
+				speakerResp = postUrl("https://cdev.manageengine.com/server/me-events-api_function/performEventDatelist",dateListMap);
+				speakerOutput = speakerResp.toMap();
+				event_datelist_id_ = speakerOutput.get("datelist_id");
+				j_list.datelist_event_id=event_datelist_id_;
+			}
+			// ********************************************
+			// **** INSERT NOTIFICATION LIST ****
+			// ********************************************
+			notificationMap = Map();
+			notificationMap.put("title",input.Title);
+			notificationMap.put("description",input.Description);
+			notificationMap.put("event_id",event_id);
+			notificationMap.put("category",input.Event_category);
+			// notificationResp = postUrl("https://meevents-709834020.development.catalystserverless.com/server/me_events_function/addNotification",notificationMap);
+			notificationResp = postUrl("https://cdev.manageengine.com/server/me-events-api_function/addNotification",notificationMap);
+		}
+	}
+	// *************** UPDATE FUNCTION ****************** //
+	else if(Select_where_you_want = "Add to listing" && Approval_Status == "Approve")
+	{
+		getCountryName = Countries[ID == input.Country];
+		myMap = Map();
+		myMap.put("title",input.Title);
+		myMap.put("description",input.Description);
+		// myMap.put("place","creatorapi"); -- need to add in form
+		myMap.put("event_from",input.From_Date);
+		myMap.put("event_to",input.To_Date);
+		myMap.put("type",input.Event_category);
+		myMap.put("web_url",input.Event_Webinar_URL);
+		myMap.put("solution",input.All_Solutions);
+		myMap.put("products",input.Products_solution);
+		// myMap.put("document_link",); -- need to add in form
+		// 	myMap.put("country",input.Countries);
+		myMap.put("country",getCountryName.Country);
+		myMap.put("region",input.Region);
+		myMap.put("keywords",input.Keywords);
+		myMap.put("one_on_one_meeting",input.one_on_one_meeting);
+		myMap.put("agenda_url",input.Agenda);
+		myMap.put("venue_details",input.Venue_details);
+		myMap.put("approval_status",input.Approval_Status);
+		myMap.put("webinar_duration",input.Webinar_Duration);
+		myMap.put("timezone",input.Timezone);
+		myMap.put("agenda_url",input.Agenda_URL);
+		myMap.put("listing_status",1);
+		myMap.put("mode","update");
+		myMap.put("event_id",input.catl_event_id);
+		//
+		// myMap.put("agenda_status","creatorapi");
+		// myMap.put("speaker_status","creatorapi");
+		// myMap.put("address_status","creatorapi");
+		// myMap.put("address_url","creatorapi");
+		// 
+		// resp = postUrl("https://meevents-709834020.development.catalystserverless.com/server/me_events_function/performEventWebinar",myMap);
+		resp = postUrl("https://cdev.manageengine.com/server/me-events-api_function/performEventWebinar",myMap);
+		out = resp.toMap();
+		statusCode = out.get("statusCode");
+		event_id = out.get("event_id");
+		if(statusCode == "200")
+		{
+			// ********************************************
+			// **** UPDATE SPEAKER LIST ****
+			// ********************************************
+			for each  i_list in Speakers
+			{
+				speakerMap = Map();
+				speakerMap.put("speaker_name",i_list.Speaker_Name);
+				speakerMap.put("speaker_image",i_list.Speaker_Image_Url);
+				speakerMap.put("speaker_designation",i_list.Speaker_Designation);
+				speakerMap.put("event_webinar_id",event_id);
+				speakerMap.put("mode","update");
+				speakerMap.put("speaker_id",i_list.speaker_event_id);
+				// speakerResp = postUrl("https://meevents-709834020.development.catalystserverless.com/server/me_events_function/performEventSpeakers",speakerMap);
+				speakerResp = postUrl("https://cdev.manageengine.com/server/me-events-api_function/performEventSpeakers",speakerMap);
+				// 		speakerOutput = speakerResp.toMap();
+				// 		event_speaker_id_ = speakerOutput.get("speaker_id");
+				// 		i_list.speaker_event_id=event_speaker_id_;
+			}
+			// ********************************************
+			// **** UPDATE DATE LIST ****
+			// ********************************************
+			for each  j_list in Dates_list
+			{
+				dateListMap = Map();
+				dateListMap.put("event_list_date",j_list.Date_field1);
+				dateListMap.put("event_list_time",j_list.Time);
+				dateListMap.put("event_list_timezone",getTimezoneName.Timezone_Value);
+				dateListMap.put("event_list_web_url",j_list.Events_Webinar_URL);
+				dateListMap.put("mode","update");
+				dateListMap.put("datelist_id",j_list.datelist_event_id);
+				//datelistResp = postUrl("https://meevents-709834020.development.catalystserverless.com/server/me_events_function/performEventDatelist",dateListMap);
+				datelistResp = postUrl("https://cdev.manageengine.com/server/me-events-api_function/performEventDatelist",dateListMap);
+			}
+		}
+	}
+}
+
+
+// >>>>>>>>>> Edit-comments track & Edit-ME 2023 stat update
+
+// ------> SCRIPT 1
+
+if(input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	if((input.Comments != "" && input.Approval_Status == "Approve") || (input.Comments != "" && input.Approval_Status == "Remove from list"))
+	{
+		insert into Events_Webinar_comments_track
+		[
+			Added_User=zoho.loginuser
+			Event_Form_ID=input.ID
+			User_Comments=input.Comments
+		]
+		getRecordDetails = Event_and_Webinar_Request[ID == input.ID];
+		recordMap = Map();
+		recordMap.put("ID",input.ID);
+		recordMap.put("Events_or_Webinars",input.Events_or_Webinars);
+		recordMap.put("Select_where_you_want",input.Select_where_you_want);
+		recordMap.put("Request_Type",input.Request_Type);
+		recordMap.put("Title",input.Title);
+		recordMap.put("Description",input.Description);
+		recordMap.put("Event_category",input.Event_category);
+		// 	recordMap.put("Event_type",input.Event_type);
+		recordMap.put("Priority",input.Priority);
+		recordMap.put("ew_loginUser",input.ew_loginUser);
+		recordMap.put("Comments",input.Comments);
+		recordMap.put("Added_User",input.Added_User);
+		thisapp.eventsWebinar.commentsMailSend(recordMap);
+	}
+}
+
+
+// ------>SCRIPT 2
+
+if(input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	if(input.Approval_Status == "Approve")
+	{
+		// ******************************************************** 
+		// ********** Update ME Events 2023 statistics ******** 
+		// ********************************************************
+		statisticData = Map();
+		Team_name = "ME Central Marketing";
+		soltionDetails = ME_Solutions[ID == input.All_Solutions];
+		if(soltionDetails.Solution != "ManageEngine")
+		{
+			Team_name = soltionDetails.Solution;
+		}
+		statisticData.put("Team",Team_name);
+		statisticData.put("Event_type",input.Event_category);
+		statisticData.put("Event_From_date",input.From_Date);
+		statisticData.put("Event_to_date",input.To_Date);
+		statisticData.put("Event_name",input.Event_Name);
+		statisticData.put("Pageurl",input.Event_Webinar_URL);
+		statisticData.put("Region",input.Region);
+		statisticData.put("Country",input.Country);
+		statisticData.put("Page_Live_Date",zoho.currentdate);
+		statisticData.put("statistic_form_id",input.statistic_form_id);
+		getStaticticID = thisapp.eventsWebinar.me_events_2023_statistic_insert_update(statisticData,"update");
+	}
+}
+
+
+//>>>>>>>>>> Edit Geo calendar integration
+
+if(input.ew_loginUser == "sunil.sakthivel@zohocorp.com")
+{
+	// Do Nothing
+	// Email process will not send to the mention user
+}
+else
+{
+	if(landing_page == "Yes" || (landing_page == "No" && Select_your_option == "Add to website"))
+	{
+		caelndarBaseUrl = "https://centralmarketing-709834020.development.catalystserverless.com/server/me-events-backstage-events/";
+		calendarStartDate = input.Start_String;
+		calendarStartDate = replaceAll(calendarStartDate,"-","");
+		calendarStartDate = replaceAll(calendarStartDate,":","");
+		calendarEndDate = input.End_String;
+		calendarEndDate = replaceAll(calendarEndDate,"-","");
+		calendarEndDate = replaceAll(calendarEndDate,":","");
+		//
+		calendarReq = Map();
+		calendarReq.put("title",input.Event_Name);
+		calendarReq.put("start",calendarStartDate);
+		calendarReq.put("end",calendarEndDate);
+		calendarReq.put("color",input.calendar_color_code);
+		calendarReq.put("eventUid",input.eventuid);
+		calendarReq.put("etag",input.etag);
+		if(calendarEndDate == calendarEndDate)
+		{
+			calendarReq.put("isallday",true);
+		}
+		else
+		{
+			calendarReq.put("isallday",false);
+		}
+		calendarReq.put("description",input.About_Event);
+		performGeoCalIntegrationUrl = caelndarBaseUrl + "calendar/updateEvent";
+		resp = postUrl(performGeoCalIntegrationUrl,calendarReq);
+		// 	info resp;
+		output = resp.toMap();
+		status = output.get("status");
+		if(status == "failure")
+		{
+			data = "Error in create event";
+			if(output.get("statusCode"))
+			{
+				data = output.get("msg");
+			}
+			else if(output.get("data"))
+			{
+				data = output.get("data");
+			}
+			chatRowsMessage = List();
+			row = Map();
+			row.put("CMD Event form ID",input.ID);
+			row.put("Event Name",input.Event_Name);
+			row.put("Message",data);
+			chatRowsMessage.add(row);
+			notifierImageLink = "https://www.zoho.com//cliq/help/restapi/images/announce_icon.png";
+			notifierDescription = "Geo calendar integration is failed for below reqiuest";
+			channelname = "crmpushorbackstagemailerfailure";
+			table = {"type":"table","title":"","data":{"headers":{"CMD Event form ID","Event Name","Message"},"rows":chatRowsMessage}};
+			cliqMessage = {"text":notifierDescription,"card":{"theme":"10"},"bot":{"name":"Edit - Geo Calendar integration - Failed","image":notifierImageLink},"slides":{table}};
+			cliqResponse = zoho.cliq.postToChannel(channelname,cliqMessage);
+		}
+		else if(status == "success")
+		{
+			details = output.get("details");
+			uid = details.get(0).get("id");
+			cEtag = details.get(0).get("etag");
+			input.etag = cEtag;
+		}
+	}
+}
+
+
+// >>>>>>>>>>>   Statistics 2024
+data = Events_Statistics_2024[ID != 0];
+// info data;
+for each  ele in data
+{
+	if(ele.Event_Id == input.ID)
+	{
+		if(ele.Event_name != input.Event_Name)
+		{
+			ele.Event_name=input.Event_Name;
+		}
+		if(ele.Event_from_Date != input.From_Date)
+		{
+			ele.Event_from_Date=input.From_Date;
+		}
+		if(ele.Event_Type != input.Event_category)
+		{
+			ele.Event_Type=input.Event_category;
+		}
+	}
+}

@@ -1,0 +1,22 @@
+// >>>>>>>>Validations on record deletion
+
+
+websiteCheck = input.Select_your_option.contains("Add to website");
+if(landing_page == "Yes" || (landing_page == "No" && websiteCheck))
+{
+	if(input.etag == "" || input.etag == null || input.eventuid == "" || input.eventuid == null)
+	{
+		alert "Please try delete record after sometime.";
+		cancel delete;
+	}
+}
+//
+//
+loginUserEmail = zoho.loginuserid;
+roleStatus = thisapp.com.getUserRole(loginUserEmail);
+userRole = roleStatus.get("userRole");
+if(input.Approval_Status == "Approve" || input.Approval_Status == "Event Closed" || input.Approval_Status == "Removed from list" || userRole != "Admin")
+{
+	alert "After approval, you are not allowed to delete the request.";
+	cancel delete;
+}

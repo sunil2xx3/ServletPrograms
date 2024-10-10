@@ -1,0 +1,37 @@
+//>>>>>> on load
+
+hide ew_loginUserRole;
+hide ew_loginUser;
+hide Start_String;
+hide End_String;
+disable Request_Type;
+hide Geo_calendar_notification;
+disable catl_event_id;
+hide catl_event_id;
+// hide creative_form_id;
+// ******** Calendar Fields ******** //
+hide etag;
+hide eventuid;
+// ******** Speakers Fields ******** //
+hide Speakers.speaker_event_id;
+// ******** New changes ******** //
+hide work_type;
+hide calendar_color_code;
+// ******** Flow configuration ******** //
+hide website_check;
+// ******** update configuration ******** //
+hide update_check_on_edit;
+//************* validation for home page banner in option ************ //
+hide home_page_banner_check_validation1;
+//************* social listing ************ //
+hide Social_listing_status;
+hide event_mode;
+//************* 2023 statistic form id ************ //
+hide statistic_form_id;
+//
+//
+//************* Review app fields ************ //
+hide Review_app_document_title;
+disable Review_app_document_title;
+all_Docs = me_review_app.SortByDescending();
+input.Choose_your_document_from_ME_Review_app:ui.append(all_Docs);

@@ -1,0 +1,70 @@
+// // 	***** Home page banners handling based on event category(user conference) ***** //
+// constVar = thisapp.eventsWebinar.constantVariable();
+// if(landing_page == "Yes")
+// {
+// 	if(input.Event_category == "User conference")
+// 	{
+// 		for each  value in constVar
+// 		{
+// 			if(value.get('landing_page') == 'yes')
+// 			{
+// 				if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+// 				{
+// 					// *** do something *** //
+// 				}
+// 				else
+// 				{
+// 					input.Select_your_option:ui.add(value.get('option'));
+// 				}
+// 			}
+// 		}
+// 	}
+// 	else
+// 	{
+// 		for each  value in constVar
+// 		{
+// 			if(value.get('landing_page') == 'yes')
+// 			{
+// 				if((value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars") || value.get('value') == 'homeBanner')
+// 				{
+// 					// *** do something ***
+// 				}
+// 				else
+// 				{
+// 					input.Select_your_option:ui.add(value.get('option'));
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+// else if(landing_page == "No")
+// {
+// 	if(input.Event_category == "User conference")
+// 	{
+// 		for each  value in constVar
+// 		{
+// 			if(value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars")
+// 			{
+// 				// *** do something ***
+// 			}
+// 			else
+// 			{
+// 				input.Select_your_option:ui.add(value.get('option'));
+// 			}
+// 		}
+// 	}
+// 	else
+// 	{
+// 		for each  value in constVar
+// 		{
+// 			if((value.get('value') == 'idCard' && input.Events_or_Webinars == "Webinars") || value.get('value') == 'homeBanner')
+// 			{
+// 				// *** do something ***
+// 			}
+// 			else
+// 			{
+// 				input.Select_your_option:ui.add(value.get('option'));
+// 			}
+// 		}
+// 	}
+// }
